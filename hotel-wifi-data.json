@@ -1,0 +1,54 @@
+[
+  {
+    "Date Measured": "9/18/25",
+    "Name": "Hotel 50 Bowery - JDV by Hyatt",
+    "Address": "50 Bowery, New York, NY 10013",
+    "Brand": "Hyatt",
+    "Internet Speed - Download (Mbps)": 28.3,
+    "Internet Speed - Upload (Mbps)": 28.1,
+    "Latency (ms)": 15.4,
+    "Jitter (ms)": 1.88,
+    "Video Streaming": "Average",
+    "Online Gaming": "Good",
+    "Video Chatting": "Good"
+  },
+  {
+    "Date Measured": "10/4/25",
+    "Name": "Sofitel London Heathrow",
+    "Address": "Terminal 5 london heathrow airport, London TW6 2GD",
+    "Brand": "",
+    "Internet Speed - Download (Mbps)": 44.8,
+    "Internet Speed - Upload (Mbps)": 75.7,
+    "Latency (ms)": 15.9,
+    "Jitter (ms)": 3.45,
+    "Video Streaming": "Average",
+    "Online Gaming": "Good",
+    "Video Chatting": "Good"
+  },
+  {
+    "Date Measured": "10/22/25",
+    "Name": "Ritz Carlton Atlanta",
+    "Address": "181 Peachtree St NW, Atlanta, GA 30303",
+    "Brand": "Marriott",
+    "Internet Speed - Download (Mbps)": 103,
+    "Internet Speed - Upload (Mbps)": 58.7,
+    "Latency (ms)": 34.6,
+    "Jitter (ms)": 38.6,
+    "Video Streaming": "Good",
+    "Online Gaming": "Average",
+    "Video Chatting": "Average"
+  },
+  {
+    "Date Measured": "11/1/25",
+    "Name": "citizenM New York Bowery hotel",
+    "Address": "",
+    "Brand": "",
+    "Internet Speed - Download (Mbps)": 65.1,
+    "Internet Speed - Upload (Mbps)": 48.1,
+    "Latency (ms)": 18.2,
+    "Jitter (ms)": 11.8,
+    "Video Streaming": "Good",
+    "Online Gaming": "Great",
+    "Video Chatting": "Good"
+  }
+]
