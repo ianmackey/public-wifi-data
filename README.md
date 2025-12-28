@@ -14,8 +14,9 @@ The data is stored in JSON format with the following structure:
 
 - **Date Measured**: Date of the speed test (YYYY-MM-DD)
 - **Name**: Location name
-- **Address**: Physical address of the location (for Hotels, Restaurants, and Airline Lounges)
 - **Category**: Type of location (Hotel, Airline, Airline Lounge, Restaurant, etc.)
+- **Latitude**: Geographic latitude coordinate (decimal degrees) - not included for Airline entries
+- **Longitude**: Geographic longitude coordinate (decimal degrees) - not included for Airline entries
 - **Download (Mbps)**: Download speed in megabits per second
 - **Upload (Mbps)**: Upload speed in megabits per second
 - **Latency (ms)**: Network latency in milliseconds
@@ -27,24 +28,27 @@ For airline entries, additional fields include:
 - **Route**: Flight route (e.g., "LAX-JFK")
 - **Provider**: WiFi provider name
 
+For hotel entries, additional fields include:
+- **Website**: Official website URL
+- **Latitude**: Geographic latitude coordinate (decimal degrees)
+- **Longitude**: Geographic longitude coordinate (decimal degrees)
+
 For airline lounge entries, additional fields include:
 - **Airline**: Airline name
-- **Address**: Physical address including airport and terminal
+- **Website**: Official website URL
+- **Latitude**: Geographic latitude coordinate (decimal degrees)
+- **Longitude**: Geographic longitude coordinate (decimal degrees)
 - Note: Airport and terminal should be included in the Name field (e.g., "Alaska Airlines Lounge - SFO Terminal 1")
 
 For restaurant entries, additional fields include:
 - **Brand**: Restaurant brand name
-- **Address**: Physical address of the location
+- **Website**: Official website URL
+- **Latitude**: Geographic latitude coordinate (decimal degrees)
+- **Longitude**: Geographic longitude coordinate (decimal degrees)
 
 ## Contributing
 
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to submit your WiFi speed test data.
-
-You can submit data through:
-- **GitHub Pull Request** (preferred) - Edit `wifi-data.json` directly
-- **GitHub Issue** - Open an issue with your data and screenshot
-
-All submissions require a screenshot of your speed test results for verification.
+I'll be adding support for contributions soon - likely through simple form submission.
 
 ## License
 
