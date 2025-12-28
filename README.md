@@ -6,6 +6,8 @@ A collection of WiFi speed test data from hotels, airlines, and other public loc
 
 This repository contains real-world WiFi performance data including download/upload speeds, latency, and jitter measurements from various locations. The data is useful for travelers, researchers, and anyone interested in public WiFi performance.
 
+I know this isn't the most elegant solution, but I wanted to get this project going and hopefully as it grows, I'll continue to make improvements.
+
 ## Data Format
 
 The data is stored in JSON format with the following structure:

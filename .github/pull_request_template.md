@@ -23,5 +23,8 @@
 [Attach screenshot here]
 
 ### Notes
+- [ ] VPN was disabled during speed test (recommended)
+- [ ] VPN was enabled during speed test (please note which VPN service if applicable)
+
 Any additional context or notes:
 

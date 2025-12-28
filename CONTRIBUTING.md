@@ -62,6 +62,7 @@ This helps verify the accuracy of submissions and ensures data quality.
   - [Fast.com](https://fast.com/)
   - [Google Speed Test](https://www.google.com/search?q=speed+test)
   - [Cloudflare Speed Test](https://speed.cloudflare.com/)
+- Please disable VPN when running speed tests. If you can't or don't feel comfortable disabling your VPN, please note VPN usage in your submission
 - Test during normal usage conditions
 - Include the exact location name as it appears
 - Use the date format YYYY-MM-DD
