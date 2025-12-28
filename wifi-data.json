@@ -37,7 +37,7 @@
   },
   {
     "Date Measured": "2025-09-14",
-    "Name": "JetBlue A321 LAX-JFK",
+    "Name": "JetBlue LAX-JFK",
     "Category": "Airline",
     "Airline": "JetBlue",
     "Aircraft Type": "A321",
@@ -50,7 +50,7 @@
   },
   {
     "Date Measured": "2025-09-18",
-    "Name": "United 777-200 ER EWR-LAX",
+    "Name": "United EWR-LAX",
     "Category": "Airline",
     "Airline": "United",
     "Aircraft Type": "777-200 ER",
