@@ -17,14 +17,6 @@ Thank you for contributing to the public WiFi data collection! Your submissions 
 3. **Attach a screenshot** of your speed test results (required for verification)
 4. We'll add your entry to the dataset
 
-### Option 3: Email
-1. Send an email with your speed test data and screenshot
-2. Include all required information from the data format section below
-3. **Attach a screenshot** of your speed test results (required for verification)
-4. We'll add your entry to the dataset
-
-*Note: For email submissions, please check the repository for contact information or open an issue to request the email address.*
-
 ## Data Format
 
 Please follow this JSON structure:

@@ -43,7 +43,6 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guid
 You can submit data through:
 - **GitHub Pull Request** (preferred) - Edit `wifi-data.json` directly
 - **GitHub Issue** - Open an issue with your data and screenshot
-- **Email** - Contact information available in [CONTRIBUTING.md](CONTRIBUTING.md)
 
 All submissions require a screenshot of your speed test results for verification.
 
