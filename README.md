@@ -40,11 +40,12 @@ For restaurant entries, additional fields include:
 
 We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to submit your WiFi speed test data.
 
-Quick steps:
-1. Click "Edit this file" on `wifi-data.json`
-2. Add your entry following the existing format
-3. Include a screenshot of your speed test results
-4. Submit a pull request
+You can submit data through:
+- **GitHub Pull Request** (preferred) - Edit `wifi-data.json` directly
+- **GitHub Issue** - Open an issue with your data and screenshot
+- **Email** - Contact information available in [CONTRIBUTING.md](CONTRIBUTING.md)
+
+All submissions require a screenshot of your speed test results for verification.
 
 ## License
 

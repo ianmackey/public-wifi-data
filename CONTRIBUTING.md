@@ -4,11 +4,26 @@ Thank you for contributing to the public WiFi data collection! Your submissions 
 
 ## How to Submit
 
+### Option 1: GitHub Pull Request (Preferred)
 1. Click the "Edit this file" (pencil icon) on `wifi-data.json`
 2. Add your entry following the existing format
 3. Fill out the PR template completely
 4. **Attach a screenshot** of your speed test results (required for verification)
 5. Submit the pull request
+
+### Option 2: GitHub Issue
+1. Open a new [GitHub Issue](https://github.com/ianmackey/public-wifi-data/issues/new)
+2. Include all required information from the data format section below
+3. **Attach a screenshot** of your speed test results (required for verification)
+4. We'll add your entry to the dataset
+
+### Option 3: Email
+1. Send an email with your speed test data and screenshot
+2. Include all required information from the data format section below
+3. **Attach a screenshot** of your speed test results (required for verification)
+4. We'll add your entry to the dataset
+
+*Note: For email submissions, please check the repository for contact information or open an issue to request the email address.*
 
 ## Data Format
 
