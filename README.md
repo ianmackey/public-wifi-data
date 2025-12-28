@@ -12,7 +12,8 @@ The data is stored in JSON format with the following structure:
 
 - **Date Measured**: Date of the speed test (YYYY-MM-DD)
 - **Name**: Location name
-- **Category**: Type of location (Hotel, Airline, etc.)
+- **Address**: Physical address of the location (for Hotels, Restaurants, and Airline Lounges)
+- **Category**: Type of location (Hotel, Airline, Airline Lounge, Restaurant, etc.)
 - **Download (Mbps)**: Download speed in megabits per second
 - **Upload (Mbps)**: Upload speed in megabits per second
 - **Latency (ms)**: Network latency in milliseconds
@@ -23,6 +24,15 @@ For airline entries, additional fields include:
 - **Aircraft Type**: Aircraft model
 - **Route**: Flight route (e.g., "LAX-JFK")
 - **Provider**: WiFi provider name
+
+For airline lounge entries, additional fields include:
+- **Airline**: Airline name
+- **Address**: Physical address including airport and terminal
+- Note: Airport and terminal should be included in the Name field (e.g., "Alaska Airlines Lounge - SFO Terminal 1")
+
+For restaurant entries, additional fields include:
+- **Brand**: Restaurant brand name
+- **Address**: Physical address of the location
 
 ## Contributing
 

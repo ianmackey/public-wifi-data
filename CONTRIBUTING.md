@@ -14,11 +14,12 @@ Thank you for contributing to the public WiFi data collection! Your submissions 
 
 Please follow this JSON structure:
 
+**Basic structure (all entries):**
 ```json
 {
   "Date Measured": "YYYY-MM-DD",
   "Name": "Location Name",
-  "Category": "Hotel" or "Airline",
+  "Category": "Hotel", "Airline", "Airline Lounge", "Restaurant", etc.,
   "Download (Mbps)": 0.0,
   "Upload (Mbps)": 0.0,
   "Latency (ms)": 0.0,
@@ -26,11 +27,23 @@ Please follow this JSON structure:
 }
 ```
 
-For airline entries, also include:
+**For hotel entries, also include:**
+- `"Address"`: Physical address of the hotel
+
+**For airline entries, also include:**
 - `"Airline"`: Airline name
 - `"Aircraft Type"`: Aircraft model
 - `"Route"`: Origin-Destination (e.g., "LAX-JFK")
 - `"Provider"`: WiFi provider name
+
+**For airline lounge entries, also include:**
+- `"Address"`: Physical address including airport and terminal
+- `"Airline"`: Airline name
+- Note: Include airport and terminal in the Name field (e.g., "Alaska Airlines Lounge - SFO Terminal 1")
+
+**For restaurant entries, also include:**
+- `"Address"`: Physical address of the restaurant
+- `"Brand"`: Restaurant brand name
 
 ## Required Screenshot
 
