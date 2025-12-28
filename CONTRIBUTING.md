@@ -43,6 +43,8 @@ Please follow this JSON structure:
 - `"Route"`: Origin-Destination (e.g., "LAX-JFK")
 - `"Provider"`: WiFi provider name
 
+*Tip: The best way to find flight information (aircraft type, route, etc.) is using [FlightAware](https://www.flightaware.com/) or [Flighty](https://flighty.com/).*
+
 **For airline lounge entries, also include:**
 - `"Address"`: Physical address including airport and terminal
 - `"Airline"`: Airline name
