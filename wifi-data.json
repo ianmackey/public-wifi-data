@@ -60,5 +60,16 @@
     "Upload (Mbps)": 0.06,
     "Latency (ms)": 5060.00,
     "Jitter (ms)": 762.00
+  },
+  {
+    "Date Measured": "2025-10-14",
+    "Name": "Starbucks",
+    "Address": "7804 Forest Ln, Dallas, TX 75230",
+    "Category": "Restaurant",
+    "Brand": "Starbucks",
+    "Download (Mbps)": 68.50,
+    "Upload (Mbps)": 10.50,
+    "Latency (ms)": 22.00,
+    "Jitter (ms)": 9.87
   }
 ]
