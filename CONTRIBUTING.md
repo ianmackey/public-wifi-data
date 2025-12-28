@@ -47,7 +47,7 @@ Please follow this JSON structure:
 
 ## Required Screenshot
 
-Please include a screenshot from your speed test tool (Speedtest.net, Fast.com, etc.) showing:
+Please include a screenshot from your speed test tool ([Speedtest.net](https://www.speedtest.net/), [Fast.com](https://fast.com/), [Cloudflare Speed Test](https://speed.cloudflare.com/), etc.) showing:
 - Download speed
 - Upload speed
 - Latency/Jitter
@@ -57,7 +57,11 @@ This helps verify the accuracy of submissions and ensures data quality.
 
 ## Guidelines
 
-- Use a reliable speed test service (Speedtest.net, Fast.com, Google Speed Test, etc.)
+- Use a reliable speed test service:
+  - [Speedtest.net](https://www.speedtest.net/)
+  - [Fast.com](https://fast.com/)
+  - [Google Speed Test](https://www.google.com/search?q=speed+test)
+  - [Cloudflare Speed Test](https://speed.cloudflare.com/)
 - Test during normal usage conditions
 - Include the exact location name as it appears
 - Use the date format YYYY-MM-DD
