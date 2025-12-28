@@ -47,5 +47,18 @@
     "Upload (Mbps)": 18.10,
     "Latency (ms)": null,
     "Jitter (ms)": null
+  },
+  {
+    "Date Measured": "2025-09-18",
+    "Name": "United 777-200 ER EWR-LAX",
+    "Category": "Airline",
+    "Airline": "United",
+    "Aircraft Type": "777-200 ER",
+    "Route": "EWR-LAX",
+    "Provider": "Panasonic",
+    "Download (Mbps)": 0.06,
+    "Upload (Mbps)": 0.06,
+    "Latency (ms)": 5060.00,
+    "Jitter (ms)": 762.00
   }
 ]
