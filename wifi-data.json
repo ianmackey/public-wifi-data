@@ -2,6 +2,7 @@
   {
     "Date Measured": "2025-09-18",
     "Name": "Hotel 50 Bowery - JDV by Hyatt",
+    "Address": "50 Bowery, New York, NY 10013",
     "Category": "Hotel",
     "Download (Mbps)": 28.3,
     "Upload (Mbps)": 28.1,
@@ -11,6 +12,7 @@
   {
     "Date Measured": "2025-10-04",
     "Name": "Sofitel London Heathrow",
+    "Address": "Terminal 5, London Heathrow Airport, Longford, Hounslow TW6 2GD, United Kingdom",
     "Category": "Hotel",
     "Download (Mbps)": 44.8,
     "Upload (Mbps)": 75.7,
@@ -20,6 +22,7 @@
   {
     "Date Measured": "2025-10-22",
     "Name": "Ritz Carlton Atlanta",
+    "Address": "181 Peachtree St NE, Atlanta, GA 30303",
     "Category": "Hotel",
     "Download (Mbps)": 103,
     "Upload (Mbps)": 58.7,
@@ -29,6 +32,7 @@
   {
     "Date Measured": "2025-11-01",
     "Name": "citizenM New York Bowery Hotel",
+    "Address": "189 Bowery, New York, NY 10002",
     "Category": "Hotel",
     "Download (Mbps)": 65.1,
     "Upload (Mbps)": 48.1,
