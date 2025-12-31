@@ -98,5 +98,18 @@
     "Upload (Mbps)": 90.5,
     "Latency (ms)": 19.0,
     "Jitter (ms)": 5.00
+  },
+  {
+    "Date Measured": "2025-12-31",
+    "Name": "Alaska Airlines Lounge - LAX Terminal 6",
+    "Category": "Airline Lounge",
+    "Airline": "Alaska Airlines",
+    "Website": "https://www.alaskaair.com/content/airport-lounge/location-and-hours",
+    "Latitude": 33.9425,
+    "Longitude": -118.4081,
+    "Download (Mbps)": 93.3,
+    "Upload (Mbps)": 186,
+    "Latency (ms)": 9.20,
+    "Jitter (ms)": 2.08
   }
 ]
