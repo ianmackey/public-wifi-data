@@ -111,5 +111,29 @@
     "Upload (Mbps)": 186,
     "Latency (ms)": 9.20,
     "Jitter (ms)": 2.08
+  },
+  {
+    "Date Measured": "2025-12-31",
+    "Name": "Park Hyatt Toronto",
+    "Category": "Hotel",
+    "Website": "https://www.hyatt.com/park-hyatt/en-US/torph-park-hyatt-toronto",
+    "Latitude": 43.6700,
+    "Longitude": -79.3950,
+    "Download (Mbps)": 1.65,
+    "Upload (Mbps)": 9.16,
+    "Latency (ms)": 365,
+    "Jitter (ms)": 114
+  },
+  {
+    "Date Measured": "2025-12-31",
+    "Name": "YYZ Terminal 3 Bag Claim - Near Claim 5",
+    "Category": "Airport",
+    "Website": "https://www.torontopearson.com/",
+    "Latitude": 43.6777,
+    "Longitude": -79.6248,
+    "Download (Mbps)": 104,
+    "Upload (Mbps)": 25.7,
+    "Latency (ms)": 22.5,
+    "Jitter (ms)": 3.00
   }
 ]
