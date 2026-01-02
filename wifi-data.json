@@ -135,5 +135,18 @@
     "Upload (Mbps)": 25.7,
     "Latency (ms)": 22.5,
     "Jitter (ms)": 3.00
+  },
+  {
+    "Date Measured": "2026-01-27",
+    "Name": "NEO COFFEE BAR - 12 Gloucester St, Toronto, ON",
+    "Category": "Restaurant",
+    "Brand": "NEO COFFEE BAR",
+    "Website": "https://www.neocoffeebar.com/location/yonge-gloucester/",
+    "Latitude": 43.6640,
+    "Longitude": -79.3840,
+    "Download (Mbps)": 24.1,
+    "Upload (Mbps)": 8.82,
+    "Latency (ms)": 21.5,
+    "Jitter (ms)": 17.9
   }
 ]
