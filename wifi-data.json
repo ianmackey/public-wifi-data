@@ -137,6 +137,19 @@
     "Jitter (ms)": 3.00
   },
   {
+    "Date Measured": "2026-01-02",
+    "Name": "Som Tum Jinda - Gerrard St, Toronto, ON",
+    "Category": "Restaurant",
+    "Brand": "Som Tum Jinda",
+    "Website": "https://maps.app.goo.gl/",
+    "Latitude": 43.66019818901979,
+    "Longitude": -79.37794674787914,
+    "Download (Mbps)": 353,
+    "Upload (Mbps)": 45.1,
+    "Latency (ms)": 18.5,
+    "Jitter (ms)": 5.63
+  },
+  {
     "Date Measured": "2026-01-27",
     "Name": "NEO COFFEE BAR - 12 Gloucester St, Toronto, ON",
     "Category": "Restaurant",
