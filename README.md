@@ -25,11 +25,9 @@ The interactive map includes:
 
 ## Viewing the Map
 
-You can view the interactive map by:
+You can view the interactive map on my website at [https://ianmackey.com/internet-speeds/](https://ianmackey.com/internet-speeds/).
 
-1. **GitHub Pages** (if enabled): Visit `https://[your-username].github.io/public-wifi-data/`
-2. **Locally**: Open `index.html` in a web browser
-3. **Raw GitHub**: View the raw HTML file on GitHub
+Alternatively, you can open `index.html` locally in a web browser.
 
 Note: The map requires a Mapbox access token (already included in the code) to function properly.
 

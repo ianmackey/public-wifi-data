@@ -118,16 +118,16 @@
     }
     
     #wifi-map {
-      height: calc(100vh - 280px);
-      min-height: 400px;
+      height: calc(100vh - 180px);
+      min-height: 500px;
       border-radius: 4px;
       border: 1px solid rgba(127, 127, 127, 0.35);
     }
 
     @media (max-width: 768px) {
       #wifi-map {
-        height: calc(100vh - 200px);
-        min-height: 300px;
+        height: calc(100vh - 120px);
+        min-height: 400px;
       }
     }
     
@@ -334,80 +334,6 @@
       flex-shrink: 0;
     }
 
-    #speed-range-filter {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 200px;
-    }
-
-    @media (max-width: 768px) {
-      #speed-range-filter {
-        min-width: auto;
-        width: 100%;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
-      }
-
-      #speed-range-filter label {
-        display: block;
-      }
-
-      #speed-range-filter .range-values {
-        min-width: auto;
-        text-align: left;
-        font-size: 11px;
-      }
-    }
-
-    #speed-range-filter input[type="range"] {
-      flex: 1;
-      height: 6px;
-      border-radius: 3px;
-      background: rgba(127, 127, 127, 0.2);
-      outline: none;
-      -webkit-appearance: none;
-      appearance: none;
-      touch-action: manipulation;
-    }
-
-    #speed-range-filter input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: #2563eb;
-      cursor: pointer;
-    }
-
-    @media (max-width: 768px) {
-      #speed-range-filter input[type="range"]::-webkit-slider-thumb {
-        width: 20px;
-        height: 20px;
-      }
-
-      #speed-range-filter input[type="range"]::-moz-range-thumb {
-        width: 20px;
-        height: 20px;
-      }
-    }
-
-    #speed-range-filter input[type="range"]::-moz-range-thumb {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: #2563eb;
-      cursor: pointer;
-      border: none;
-    }
-
-    #speed-range-filter .range-values {
-      font-size: 12px;
-      min-width: 80px;
-      text-align: right;
-    }
 
     #statistics-panel {
       display: grid;
@@ -530,7 +456,6 @@
     let markers = [];
     let currentCategory = "all";
     let tableSortState = { column: null, direction: null };
-    let speedRange = { min: 0, max: 1000 };
     let dataMap = new Map(); // Map row data to markers for click-to-fly
     let highlightedMarker = null;
     let geoJsonSource = null;
@@ -883,7 +808,7 @@
 
     async function searchLocation(query) {
       if (!query) {
-        const filtered = filterData(allData, currentCategory, speedRange);
+        const filtered = filterData(allData, currentCategory);
         addMarkers(filtered);
         return;
       }
@@ -1001,9 +926,8 @@
       const tableEl = document.getElementById("wifi-table");
       const searchWrapper = document.querySelector(".search-wrapper");
       const legendEl = document.getElementById("speed-legend");
-      const speedFilterWrapper = document.getElementById("speed-range-filter");
       
-      const filtered = filterData(allData, currentCategory, speedRange);
+      const filtered = filterData(allData, currentCategory);
 
       // Update statistics
       updateStatistics(filtered);
@@ -1014,7 +938,6 @@
         tableEl.classList.add("visible");
         searchWrapper?.classList.add("hidden");
         if (legendEl) legendEl.classList.add("hidden");
-        if (speedFilterWrapper) speedFilterWrapper.style.display = "none";
         clearMarkers();
         renderTable(filtered);
       } else {
@@ -1022,7 +945,6 @@
         tableEl.classList.remove("visible");
         searchWrapper?.classList.remove("hidden");
         if (legendEl) legendEl.classList.remove("hidden");
-        if (speedFilterWrapper) speedFilterWrapper.style.display = "flex";
         mapEl.classList.remove("hidden");
         addMarkers(filtered);
       }
@@ -1098,74 +1020,6 @@
       `;
     }
 
-    function createSpeedRangeFilter() {
-      const controls = document.getElementById("wifi-controls");
-      if (!controls) return;
-
-      const speedFilterWrapper = document.createElement("div");
-      speedFilterWrapper.id = "speed-range-filter";
-      speedFilterWrapper.style.display = "none"; // Hidden by default, shown for location-based views
-
-      const label = document.createElement("label");
-      label.textContent = "Speed: ";
-      label.style.fontWeight = "500";
-
-      const minInput = document.createElement("input");
-      minInput.type = "range";
-      minInput.min = "0";
-      minInput.max = "500";
-      minInput.value = "0";
-      minInput.id = "speed-min";
-
-      const maxInput = document.createElement("input");
-      maxInput.type = "range";
-      maxInput.min = "0";
-      maxInput.max = "500";
-      maxInput.value = "500";
-      maxInput.id = "speed-max";
-
-      const valuesDisplay = document.createElement("div");
-      valuesDisplay.className = "range-values";
-      valuesDisplay.textContent = "0 - 500+ Mbps";
-
-      function updateSpeedFilter() {
-        const min = parseInt(minInput.value);
-        const max = parseInt(maxInput.value);
-        
-        // Ensure min <= max
-        if (min > max) {
-          if (minInput === document.activeElement) {
-            maxInput.value = min;
-          } else {
-            minInput.value = max;
-          }
-        }
-
-        const finalMin = parseInt(minInput.value);
-        const finalMax = parseInt(maxInput.value);
-        speedRange = { min: finalMin, max: finalMax === 500 ? 1000 : finalMax };
-        
-        valuesDisplay.textContent = `${finalMin} - ${finalMax === 500 ? "500+" : finalMax} Mbps`;
-        updateView();
-      }
-
-      minInput.addEventListener("input", updateSpeedFilter);
-      maxInput.addEventListener("input", updateSpeedFilter);
-
-      speedFilterWrapper.appendChild(label);
-      speedFilterWrapper.appendChild(minInput);
-      speedFilterWrapper.appendChild(maxInput);
-      speedFilterWrapper.appendChild(valuesDisplay);
-
-      // Insert after category filter
-      const categoryFilter = document.getElementById("category-filter");
-      if (categoryFilter && categoryFilter.parentElement) {
-        categoryFilter.parentElement.parentElement.insertBefore(speedFilterWrapper, categoryFilter.parentElement.nextSibling);
-      } else {
-        controls.appendChild(speedFilterWrapper);
-      }
-    }
-
     // ─────────────────────────────────────────────────────────────
     // Controls
     // ─────────────────────────────────────────────────────────────
@@ -1193,11 +1047,6 @@
       select.addEventListener("change", (e) => {
         currentCategory = e.target.value;
         tableSortState = { column: null, direction: null };
-        speedRange = { min: 0, max: 1000 }; // Reset speed filter
-        const minInput = document.getElementById("speed-min");
-        const maxInput = document.getElementById("speed-max");
-        if (minInput) minInput.value = "0";
-        if (maxInput) maxInput.value = "500";
         updateView();
       });
 
@@ -1254,7 +1103,6 @@
       map.addControl(new mapboxgl.NavigationControl(), "top-right");
 
       createControls(getCategories(allData));
-      createSpeedRangeFilter();
       createSpeedLegend();
 
       // Wait for map to load before adding sources
