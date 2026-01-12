@@ -822,7 +822,7 @@
       const lastDateFormatted = lastDate ? formatDate(lastDate.toISOString().split('T')[0]) : '';
 
       statsPanel.innerHTML = `
-        I've measured ${locationData.length} location${locationData.length !== 1 ? 's' : ''}${lastDateFormatted ? ` (last measured: ${lastDateFormatted})` : ''}. Average download speed: ${formatNumber(avgDownload)} Mbps, average upload speed: ${formatNumber(avgUpload)} Mbps. Top speed: ${formatNumber(maxDownload)} Mbps, slowest: ${formatNumber(minDownload)} Mbps.
+        I've measured ${locationData.length} location${locationData.length !== 1 ? 's' : ''}${lastDateFormatted ? ` (last measured: ${lastDateFormatted})` : ''}. Average download speed: ${formatNumber(avgDownload)} Mbps, average upload speed: ${formatNumber(avgUpload)} Mbps.
       `;
     }
 
