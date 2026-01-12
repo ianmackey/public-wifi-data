@@ -14,14 +14,14 @@ The interactive map includes:
 
 - **Interactive Map Visualization**: Color-coded markers based on download speed (green = fast, red = slow)
 - **Marker Clustering**: Automatically clusters markers when zoomed out for better performance
-- **Speed Filter**: Filter locations by download speed range using dual-handle slider
 - **Category Filtering**: Filter by location type (Hotels, Restaurants, Airline Lounges, etc.)
-- **Statistics Panel**: Real-time statistics showing total locations, average speeds, and fastest/slowest connections
+- **Statistics Display**: Real-time statistics showing total locations, average speeds, and fastest/slowest connections
 - **Speed Legend**: Visual guide showing the color-to-speed mapping
 - **Location Search**: Search for cities or zip codes to quickly navigate the map
 - **Enhanced Popups**: Detailed information including category, provider, and speed metrics
 - **Mobile Optimized**: Fully responsive design optimized for mobile devices
 - **Airline Data Table**: Separate table view for airline WiFi data (routes, aircraft types, providers)
+- **Free & Open Source**: Uses Leaflet with OpenStreetMap tiles - no API key required
 
 ## Viewing the Map
 
@@ -29,7 +29,7 @@ You can view the interactive map on my website at [https://ianmackey.com/interne
 
 Alternatively, you can open `index.html` locally in a web browser.
 
-Note: The map requires a Mapbox access token (already included in the code) to function properly.
+The map uses Leaflet with OpenStreetMap tiles - no API key or authentication required.
 
 ## Data Format
 
@@ -74,9 +74,8 @@ For restaurant entries, additional fields include:
 ### Controls
 
 - **Filter Dropdown**: Select a category to filter locations (All, Hotel, Restaurant, Airline Lounge, etc.)
-- **Speed Range Slider**: Adjust the minimum and maximum download speed to filter results
 - **Search Box**: Enter a city name or zip code to fly to that location on the map
-- **Statistics Cards**: View summary statistics for the currently filtered data
+- **Statistics Display**: View summary statistics for the currently filtered data (displayed as plain text)
 - **Speed Legend**: Reference guide showing what each marker color represents
 
 ### Map Interactions
