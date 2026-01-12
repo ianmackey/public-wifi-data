@@ -282,6 +282,33 @@
       font-size: 12px;
       z-index: 1000;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    #speed-legend.collapsed {
+      padding: 8px 12px;
+    }
+
+    #speed-legend.collapsed .legend-content {
+      display: none;
+    }
+
+    #speed-legend .legend-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    #speed-legend .legend-toggle {
+      font-size: 10px;
+      color: rgba(127, 127, 127, 0.8);
+      transition: transform 0.2s ease;
+    }
+
+    #speed-legend.collapsed .legend-toggle {
+      transform: rotate(-90deg);
     }
 
     @media (max-width: 768px) {
@@ -314,9 +341,13 @@
     }
 
     #speed-legend h3 {
-      margin: 0 0 8px 0;
+      margin: 0;
       font-size: 13px;
       font-weight: 600;
+    }
+
+    #speed-legend .legend-content {
+      margin-top: 8px;
     }
 
     #speed-legend .legend-item {
@@ -802,29 +833,42 @@
       const legend = document.getElementById("speed-legend");
       if (!legend) return;
 
+      // Start collapsed by default
+      legend.classList.add("collapsed");
+
       legend.innerHTML = `
-        <h3>Download Speed</h3>
-        <div class="legend-item">
-          <div class="legend-dot" style="background-color: #22c55e;"></div>
-          <span>≥ 100 Mbps</span>
+        <div class="legend-header">
+          <h3>Download Speed</h3>
+          <span class="legend-toggle">▼</span>
         </div>
-        <div class="legend-item">
-          <div class="legend-dot" style="background-color: #84cc16;"></div>
-          <span>50 - 99 Mbps</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-dot" style="background-color: #eab308;"></div>
-          <span>25 - 49 Mbps</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-dot" style="background-color: #f97316;"></div>
-          <span>10 - 24 Mbps</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-dot" style="background-color: #ef4444;"></div>
-          <span>&lt; 10 Mbps</span>
+        <div class="legend-content">
+          <div class="legend-item">
+            <div class="legend-dot" style="background-color: #22c55e;"></div>
+            <span>≥ 100 Mbps</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background-color: #84cc16;"></div>
+            <span>50 - 99 Mbps</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background-color: #eab308;"></div>
+            <span>25 - 49 Mbps</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background-color: #f97316;"></div>
+            <span>10 - 24 Mbps</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background-color: #ef4444;"></div>
+            <span>&lt; 10 Mbps</span>
+          </div>
         </div>
       `;
+
+      // Add click handler to toggle
+      legend.addEventListener("click", () => {
+        legend.classList.toggle("collapsed");
+      });
     }
 
     // ─────────────────────────────────────────────────────────────
