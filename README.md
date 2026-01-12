@@ -14,14 +14,14 @@ The interactive map includes:
 
 - **Interactive Map Visualization**: Color-coded markers based on download speed (green = fast, red = slow)
 - **Marker Clustering**: Automatically clusters markers when zoomed out for better performance
-- **Category Filtering**: Filter by location type (Hotels, Restaurants, Airline Lounges, etc.)
 - **Statistics Display**: Real-time statistics showing total locations, average speeds, and fastest/slowest connections
-- **Speed Legend**: Visual guide showing the color-to-speed mapping
+- **Speed Legend**: Visual guide showing the color-to-speed mapping (collapsible to save space)
 - **Location Search**: Search for cities or zip codes to quickly navigate the map
 - **Enhanced Popups**: Detailed information including category, provider, and speed metrics
 - **Mobile Optimized**: Fully responsive design optimized for mobile devices
-- **Airline Data Table**: Separate table view for airline WiFi data (routes, aircraft types, providers)
 - **Free & Open Source**: Uses Leaflet with OpenStreetMap tiles - no API key required
+
+**Note**: Airline data (in-flight WiFi measurements) is currently not displayed on the map as these entries don't have geographic coordinates. Only location-based data (hotels, restaurants, airline lounges, airports, etc.) with coordinates are shown.
 
 ## Viewing the Map
 
@@ -73,10 +73,9 @@ For restaurant entries, additional fields include:
 
 ### Controls
 
-- **Filter Dropdown**: Select a category to filter locations (All, Hotel, Restaurant, Airline Lounge, etc.)
 - **Search Box**: Enter a city name or zip code to fly to that location on the map
-- **Statistics Display**: View summary statistics for the currently filtered data (displayed as plain text)
-- **Speed Legend**: Reference guide showing what each marker color represents
+- **Statistics Display**: View summary statistics for all location-based data (displayed as plain text)
+- **Speed Legend**: Reference guide showing what each marker color represents (click to expand/collapse)
 
 ### Map Interactions
 
