@@ -433,7 +433,6 @@
     let map = null;
     let allData = [];
     let markerClusterGroup = null;
-    let currentCategory = "all";
     let tableSortState = { column: null, direction: null };
     let dataMap = new Map(); // Map row data to markers for click-to-fly
 
@@ -473,38 +472,12 @@
       return "#ef4444";
     }
 
-    function getCategories(data) {
-      const categories = new Set(data.map(row => row.Category).filter(Boolean));
-      return Array.from(categories).sort();
-    }
-
-    function isAirlineCategory(category) {
-      return category === "Airline";
-    }
-
     // ─────────────────────────────────────────────────────────────
     // Data filtering & sorting
     // ─────────────────────────────────────────────────────────────
-    function filterData(data, category, speedFilter = null) {
-      let filtered = data;
-      
-      if (category === "all") {
-        filtered = data.filter(row => row.Category !== "Airline" && row.Latitude != null && row.Longitude != null);
-      } else if (isAirlineCategory(category)) {
-        filtered = data.filter(row => row.Category === "Airline");
-      } else {
-        filtered = data.filter(row => row.Category === category && row.Latitude != null && row.Longitude != null);
-      }
-
-      // Apply speed filter if provided
-      if (speedFilter) {
-        filtered = filtered.filter(row => {
-          const download = toNumber(row["Download (Mbps)"]) || 0;
-          return download >= speedFilter.min && download <= speedFilter.max;
-        });
-      }
-
-      return filtered;
+    function filterData(data) {
+      // Always show location-based data (exclude airlines which don't have coordinates)
+      return data.filter(row => row.Category !== "Airline" && row.Latitude != null && row.Longitude != null);
     }
 
     function sortData(data, column, direction) {
@@ -658,7 +631,7 @@
 
     async function searchLocation(query) {
       if (!query) {
-        const filtered = filterData(allData, currentCategory);
+        const filtered = filterData(allData);
         addMarkers(filtered);
         return;
       }
@@ -780,31 +753,19 @@
     // ─────────────────────────────────────────────────────────────
     function updateView() {
       const mapEl = document.getElementById("wifi-map");
-      const tableEl = document.getElementById("wifi-table");
       const searchWrapper = document.querySelector(".search-wrapper");
       const legendEl = document.getElementById("speed-legend");
       
-      const filtered = filterData(allData, currentCategory);
+      const filtered = filterData(allData);
 
       // Update statistics
       updateStatistics(filtered);
 
-      if (isAirlineCategory(currentCategory)) {
-        // Airline view: show table only
-        mapEl.classList.add("hidden");
-        tableEl.classList.add("visible");
-        searchWrapper?.classList.add("hidden");
-        if (legendEl) legendEl.classList.add("hidden");
-        clearMarkers();
-        renderTable(filtered);
-      } else {
-        // Location-based view: always show map
-        tableEl.classList.remove("visible");
-        searchWrapper?.classList.remove("hidden");
-        if (legendEl) legendEl.classList.remove("hidden");
-        mapEl.classList.remove("hidden");
-        addMarkers(filtered);
-      }
+      // Always show map with location-based data
+      searchWrapper?.classList.remove("hidden");
+      if (legendEl) legendEl.classList.remove("hidden");
+      mapEl.classList.remove("hidden");
+      addMarkers(filtered);
     }
 
     function updateStatistics(data) {
@@ -874,36 +835,9 @@
     // ─────────────────────────────────────────────────────────────
     // Controls
     // ─────────────────────────────────────────────────────────────
-    function createControls(categories) {
+    function createControls() {
       const controls = document.getElementById("wifi-controls");
       
-      // Category filter
-      const filterLabel = document.createElement("label");
-      filterLabel.textContent = "Filter: ";
-      const select = document.createElement("select");
-      select.id = "category-filter";
-
-      const allOption = document.createElement("option");
-      allOption.value = "all";
-      allOption.textContent = "All";
-      select.appendChild(allOption);
-
-      categories.forEach(cat => {
-        const option = document.createElement("option");
-        option.value = cat;
-        option.textContent = cat;
-        select.appendChild(option);
-      });
-
-      select.addEventListener("change", (e) => {
-        currentCategory = e.target.value;
-        tableSortState = { column: null, direction: null };
-        updateView();
-      });
-
-      filterLabel.appendChild(select);
-      controls.appendChild(filterLabel);
-
       // Search input
       const searchWrapper = document.createElement("div");
       searchWrapper.className = "search-wrapper";
@@ -960,7 +894,7 @@
       // Move zoom control to top-right
       map.zoomControl.setPosition('topright');
 
-      createControls(getCategories(allData));
+      createControls();
       createSpeedLegend();
 
       // Initialize view
