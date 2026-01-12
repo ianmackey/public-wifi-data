@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
   <title>Public WiFi Speed Map</title>
   <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
   <script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
@@ -16,10 +16,27 @@
       padding: 16px;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background: transparent;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 8px;
+        overflow-x: hidden;
+      }
     }
 
     #wifi-map-container {
       font-size: 14px;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    @media (max-width: 768px) {
+      #wifi-map-container {
+        font-size: 13px;
+      }
     }
     
     #wifi-controls {
@@ -28,6 +45,25 @@
       margin-bottom: 12px;
       flex-wrap: wrap;
       align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      #wifi-controls {
+        gap: 8px;
+        margin-bottom: 8px;
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      #wifi-controls > * {
+        width: 100%;
+      }
+
+      #wifi-controls label {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
     }
     
     #wifi-controls label {
@@ -42,58 +78,43 @@
       background: inherit;
       color: inherit;
       font-size: 14px;
+      min-height: 36px; /* Better touch target */
+    }
+
+    @media (max-width: 768px) {
+      #wifi-controls select,
+      #wifi-controls input {
+        padding: 8px 12px;
+        font-size: 16px; /* Prevents zoom on iOS */
+        min-height: 44px; /* iOS recommended touch target */
+      }
     }
     
     #wifi-controls input {
       width: 180px;
+    }
+
+    @media (max-width: 768px) {
+      #wifi-controls input {
+        width: 100%;
+      }
+
+      #wifi-controls select {
+        width: 100%;
+      }
     }
     
     #wifi-controls input::placeholder {
       color: rgba(127, 127, 127, 0.6);
     }
     
-    #wifi-controls .search-wrapper,
-    #wifi-controls .view-toggle-wrapper {
+    #wifi-controls .search-wrapper {
       transition: opacity 0.2s ease;
     }
     
-    #wifi-controls .search-wrapper.hidden,
-    #wifi-controls .view-toggle-wrapper.hidden {
+    #wifi-controls .search-wrapper.hidden {
       opacity: 0;
       pointer-events: none;
-    }
-    
-    .view-toggle {
-      display: flex;
-      gap: 0;
-    }
-    
-    .view-toggle button {
-      padding: 6px 12px;
-      border: 1px solid rgba(127, 127, 127, 0.35);
-      background: inherit;
-      color: inherit;
-      font-size: 14px;
-      cursor: pointer;
-      transition: background 0.15s ease;
-    }
-    
-    .view-toggle button:first-child {
-      border-radius: 4px 0 0 4px;
-      border-right: none;
-    }
-    
-    .view-toggle button:last-child {
-      border-radius: 0 4px 4px 0;
-    }
-    
-    .view-toggle button.active {
-      background: rgba(127, 127, 127, 0.25);
-      font-weight: 600;
-    }
-    
-    .view-toggle button:hover:not(.active) {
-      background: rgba(127, 127, 127, 0.12);
     }
     
     #wifi-map {
@@ -102,65 +123,16 @@
       border-radius: 4px;
       border: 1px solid rgba(127, 127, 127, 0.35);
     }
+
+    @media (max-width: 768px) {
+      #wifi-map {
+        height: calc(100vh - 200px);
+        min-height: 300px;
+      }
+    }
     
     #wifi-map.hidden {
       display: none;
-    }
-    
-    #wifi-list {
-      display: none;
-    }
-    
-    #wifi-list.visible {
-      display: block;
-    }
-    
-    #wifi-list table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    
-    #wifi-list th,
-    #wifi-list td {
-      padding: 8px;
-      border-bottom: 1px solid rgba(127, 127, 127, 0.25);
-      text-align: left;
-      vertical-align: top;
-    }
-    
-    #wifi-list th {
-      font-weight: 600;
-      background: rgba(127, 127, 127, 0.18);
-      border-bottom: 2px solid rgba(127, 127, 127, 0.35);
-      cursor: pointer;
-      user-select: none;
-    }
-    
-    #wifi-list th:hover {
-      background: rgba(127, 127, 127, 0.28);
-    }
-    
-    #wifi-list th .sort-indicator {
-      margin-left: 4px;
-      opacity: 0.5;
-    }
-    
-    #wifi-list th.sorted .sort-indicator {
-      opacity: 1;
-    }
-    
-    #wifi-list a {
-      color: inherit;
-      text-decoration: underline;
-    }
-    
-    #wifi-list .speed-dot {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      margin-right: 6px;
-      vertical-align: middle;
     }
     
     #wifi-table {
@@ -171,9 +143,27 @@
       display: block;
     }
     
+    #wifi-table {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
     #wifi-table table {
       width: 100%;
       border-collapse: collapse;
+      min-width: 600px;
+    }
+
+    @media (max-width: 768px) {
+      #wifi-table th,
+      #wifi-table td {
+        padding: 6px;
+        font-size: 12px;
+      }
+
+      #wifi-table th {
+        font-size: 11px;
+      }
     }
     
     #wifi-table th,
@@ -183,6 +173,12 @@
       text-align: left;
       vertical-align: top;
     }
+
+    @media (max-width: 768px) {
+      #wifi-table tbody tr {
+        min-height: 44px; /* Better touch target */
+      }
+    }
     
     #wifi-table th {
       font-weight: 600;
@@ -190,6 +186,15 @@
       border-bottom: 2px solid rgba(127, 127, 127, 0.35);
       cursor: pointer;
       user-select: none;
+      touch-action: manipulation;
+    }
+
+    @media (max-width: 768px) {
+      #wifi-table th {
+        min-height: 44px; /* Better touch target */
+        display: flex;
+        align-items: center;
+      }
     }
     
     #wifi-table th:hover {
@@ -215,6 +220,24 @@
       line-height: 1.4;
       padding: 12px;
       border-radius: 4px;
+      max-width: 300px;
+    }
+
+    @media (max-width: 768px) {
+      #wifi-map .mapboxgl-popup-content {
+        font-size: 12px;
+        padding: 10px;
+        max-width: 250px;
+      }
+
+      .popup-name {
+        font-size: 13px;
+      }
+
+      .popup-category {
+        font-size: 10px;
+        padding: 2px 5px;
+      }
     }
     
     .popup-name {
@@ -260,6 +283,31 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
+    @media (max-width: 768px) {
+      #speed-legend {
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        padding: 8px;
+        font-size: 11px;
+      }
+
+      #speed-legend h3 {
+        font-size: 11px;
+        margin-bottom: 6px;
+      }
+
+      #speed-legend .legend-item {
+        gap: 6px;
+        margin-bottom: 3px;
+      }
+
+      #speed-legend .legend-dot {
+        width: 10px;
+        height: 10px;
+      }
+    }
+
     #speed-legend.hidden {
       display: none;
     }
@@ -293,6 +341,26 @@
       min-width: 200px;
     }
 
+    @media (max-width: 768px) {
+      #speed-range-filter {
+        min-width: auto;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+
+      #speed-range-filter label {
+        display: block;
+      }
+
+      #speed-range-filter .range-values {
+        min-width: auto;
+        text-align: left;
+        font-size: 11px;
+      }
+    }
+
     #speed-range-filter input[type="range"] {
       flex: 1;
       height: 6px;
@@ -300,6 +368,8 @@
       background: rgba(127, 127, 127, 0.2);
       outline: none;
       -webkit-appearance: none;
+      appearance: none;
+      touch-action: manipulation;
     }
 
     #speed-range-filter input[type="range"]::-webkit-slider-thumb {
@@ -310,6 +380,18 @@
       border-radius: 50%;
       background: #2563eb;
       cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      #speed-range-filter input[type="range"]::-webkit-slider-thumb {
+        width: 20px;
+        height: 20px;
+      }
+
+      #speed-range-filter input[type="range"]::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+      }
     }
 
     #speed-range-filter input[type="range"]::-moz-range-thumb {
@@ -334,6 +416,20 @@
       margin-bottom: 12px;
     }
 
+    @media (max-width: 768px) {
+      #statistics-panel {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #statistics-panel {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .stat-card {
       padding: 12px;
       border-radius: 4px;
@@ -352,6 +448,20 @@
     .stat-card .stat-value {
       font-size: 20px;
       font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+      .stat-card {
+        padding: 10px;
+      }
+
+      .stat-card .stat-label {
+        font-size: 10px;
+      }
+
+      .stat-card .stat-value {
+        font-size: 18px;
+      }
     }
 
     #wifi-list tbody tr,
@@ -398,14 +508,13 @@
   </style>
 </head>
 <body>
-  <div id="wifi-map-container">
+    <div id="wifi-map-container">
     <div id="wifi-controls"></div>
     <div id="statistics-panel"></div>
     <div style="position: relative;">
       <div id="wifi-map"></div>
       <div id="speed-legend"></div>
     </div>
-    <div id="wifi-list"></div>
     <div id="wifi-table"></div>
   </div>
 
@@ -420,8 +529,6 @@
     let allData = [];
     let markers = [];
     let currentCategory = "all";
-    let currentView = "map"; // "map" or "list"
-    let listSortState = { column: null, direction: null };
     let tableSortState = { column: null, direction: null };
     let speedRange = { min: 0, max: 1000 };
     let dataMap = new Map(); // Map row data to markers for click-to-fly
@@ -758,16 +865,6 @@
       const lng = toNumber(row.Longitude);
       if (lat === null || lng === null) return;
 
-      // Switch to map view if in list view
-      if (currentView !== "map") {
-        currentView = "map";
-        updateViewToggle();
-        updateView();
-        // Wait for map to update before flying
-        setTimeout(() => flyToLocation(row), 100);
-        return;
-      }
-
       // Fly to location
       map.flyTo({
         center: [lng, lat],
@@ -787,9 +884,7 @@
     async function searchLocation(query) {
       if (!query) {
         const filtered = filterData(allData, currentCategory, speedRange);
-        if (currentView === "map") {
-          addMarkers(filtered);
-        }
+        addMarkers(filtered);
         return;
       }
 
@@ -801,125 +896,13 @@
 
         if (result.features && result.features.length > 0) {
           const [lng, lat] = result.features[0].center;
-          
-          if (currentView === "map") {
-            map.flyTo({ center: [lng, lat], zoom: 11 });
-          } else {
-            // For list view, we could filter by proximity - for now just switch to map
-            currentView = "map";
-            updateViewToggle();
-            updateView();
-            map.flyTo({ center: [lng, lat], zoom: 11 });
-          }
+          map.flyTo({ center: [lng, lat], zoom: 11 });
         }
       } catch (err) {
         console.error("Geocoding error:", err);
       }
     }
 
-    // ─────────────────────────────────────────────────────────────
-    // List view (for location-based data)
-    // ─────────────────────────────────────────────────────────────
-    function renderList(data) {
-      const listContainer = document.getElementById("wifi-list");
-      const columns = ["Name", "Category", "Download (Mbps)", "Upload (Mbps)", "Latency (ms)", "Date Measured"];
-      
-      const sortedData = sortData(data, listSortState.column, listSortState.direction);
-
-      const table = document.createElement("table");
-      
-      // Header
-      const thead = document.createElement("thead");
-      const headerRow = document.createElement("tr");
-      
-      columns.forEach(col => {
-        const th = document.createElement("th");
-        th.dataset.column = col;
-        
-        const text = document.createElement("span");
-        text.textContent = col;
-        th.appendChild(text);
-
-        const indicator = document.createElement("span");
-        indicator.className = "sort-indicator";
-        indicator.textContent = "⇅";
-        th.appendChild(indicator);
-
-        if (listSortState.column === col) {
-          th.classList.add("sorted");
-          indicator.textContent = listSortState.direction === "asc" ? "↑" : "↓";
-        }
-
-        th.addEventListener("click", () => {
-          if (listSortState.column === col) {
-            if (listSortState.direction === "asc") {
-              listSortState.direction = "desc";
-            } else {
-              listSortState = { column: null, direction: null };
-            }
-          } else {
-            listSortState = { column: col, direction: "asc" };
-          }
-          renderList(data);
-        });
-
-        headerRow.appendChild(th);
-      });
-      
-      thead.appendChild(headerRow);
-      table.appendChild(thead);
-
-      // Body
-      const tbody = document.createElement("tbody");
-      
-      sortedData.forEach(row => {
-        const tr = document.createElement("tr");
-        tr.dataset.rowData = JSON.stringify(row);
-        tr.addEventListener("click", () => {
-          flyToLocation(row);
-        });
-        
-        columns.forEach(col => {
-          const td = document.createElement("td");
-          
-          if (col === "Name") {
-            const download = toNumber(row["Download (Mbps)"]) || 0;
-            const dot = document.createElement("span");
-            dot.className = "speed-dot";
-            dot.style.backgroundColor = getSpeedColor(download);
-            td.appendChild(dot);
-            
-            if (row.Website) {
-              const a = document.createElement("a");
-              a.href = row.Website;
-              a.target = "_blank";
-              a.rel = "noopener noreferrer";
-              a.textContent = row[col] || "";
-              a.onclick = (e) => e.stopPropagation(); // Prevent row click when clicking link
-              td.appendChild(a);
-            } else {
-              td.appendChild(document.createTextNode(row[col] || ""));
-            }
-          } else if (col === "Date Measured") {
-            td.textContent = formatDate(row[col]);
-          } else if (["Download (Mbps)", "Upload (Mbps)", "Latency (ms)", "Jitter (ms)"].includes(col)) {
-            const val = toNumber(row[col]);
-            td.textContent = val !== null ? formatNumber(val) : "N/A";
-          } else {
-            td.textContent = row[col] || "";
-          }
-          
-          tr.appendChild(td);
-        });
-        
-        tbody.appendChild(tr);
-      });
-      
-      table.appendChild(tbody);
-      
-      listContainer.innerHTML = "";
-      listContainer.appendChild(table);
-    }
 
     // ─────────────────────────────────────────────────────────────
     // Airline table
@@ -1013,22 +996,10 @@
     // ─────────────────────────────────────────────────────────────
     // View switching
     // ─────────────────────────────────────────────────────────────
-    function updateViewToggle() {
-      const mapBtn = document.getElementById("view-map-btn");
-      const listBtn = document.getElementById("view-list-btn");
-      
-      if (mapBtn && listBtn) {
-        mapBtn.classList.toggle("active", currentView === "map");
-        listBtn.classList.toggle("active", currentView === "list");
-      }
-    }
-
     function updateView() {
       const mapEl = document.getElementById("wifi-map");
-      const listEl = document.getElementById("wifi-list");
       const tableEl = document.getElementById("wifi-table");
       const searchWrapper = document.querySelector(".search-wrapper");
-      const viewToggleWrapper = document.querySelector(".view-toggle-wrapper");
       const legendEl = document.getElementById("speed-legend");
       const speedFilterWrapper = document.getElementById("speed-range-filter");
       
@@ -1040,32 +1011,20 @@
       if (isAirlineCategory(currentCategory)) {
         // Airline view: show table only
         mapEl.classList.add("hidden");
-        listEl.classList.remove("visible");
         tableEl.classList.add("visible");
         searchWrapper?.classList.add("hidden");
-        viewToggleWrapper?.classList.add("hidden");
         if (legendEl) legendEl.classList.add("hidden");
         if (speedFilterWrapper) speedFilterWrapper.style.display = "none";
         clearMarkers();
         renderTable(filtered);
       } else {
-        // Location-based view: show map or list
+        // Location-based view: always show map
         tableEl.classList.remove("visible");
         searchWrapper?.classList.remove("hidden");
-        viewToggleWrapper?.classList.remove("hidden");
         if (legendEl) legendEl.classList.remove("hidden");
         if (speedFilterWrapper) speedFilterWrapper.style.display = "flex";
-        
-        if (currentView === "map") {
-          mapEl.classList.remove("hidden");
-          listEl.classList.remove("visible");
-          addMarkers(filtered);
-        } else {
-          mapEl.classList.add("hidden");
-          listEl.classList.add("visible");
-          clearMarkers();
-          renderList(filtered);
-        }
+        mapEl.classList.remove("hidden");
+        addMarkers(filtered);
       }
     }
 
@@ -1233,57 +1192,17 @@
 
       select.addEventListener("change", (e) => {
         currentCategory = e.target.value;
-        listSortState = { column: null, direction: null };
         tableSortState = { column: null, direction: null };
         speedRange = { min: 0, max: 1000 }; // Reset speed filter
         const minInput = document.getElementById("speed-min");
         const maxInput = document.getElementById("speed-max");
         if (minInput) minInput.value = "0";
         if (maxInput) maxInput.value = "500";
-        if (!isAirlineCategory(currentCategory)) {
-          currentView = "map"; // Reset to map when switching categories
-        }
-        updateViewToggle();
         updateView();
       });
 
       filterLabel.appendChild(select);
       controls.appendChild(filterLabel);
-
-      // View toggle (Map / List)
-      const viewToggleWrapper = document.createElement("div");
-      viewToggleWrapper.className = "view-toggle-wrapper";
-      
-      const viewToggle = document.createElement("div");
-      viewToggle.className = "view-toggle";
-      
-      const mapBtn = document.createElement("button");
-      mapBtn.id = "view-map-btn";
-      mapBtn.textContent = "Map";
-      mapBtn.className = "active";
-      mapBtn.addEventListener("click", () => {
-        if (currentView !== "map") {
-          currentView = "map";
-          updateViewToggle();
-          updateView();
-        }
-      });
-      
-      const listBtn = document.createElement("button");
-      listBtn.id = "view-list-btn";
-      listBtn.textContent = "List";
-      listBtn.addEventListener("click", () => {
-        if (currentView !== "list") {
-          currentView = "list";
-          updateViewToggle();
-          updateView();
-        }
-      });
-      
-      viewToggle.appendChild(mapBtn);
-      viewToggle.appendChild(listBtn);
-      viewToggleWrapper.appendChild(viewToggle);
-      controls.appendChild(viewToggleWrapper);
 
       // Search input
       const searchWrapper = document.createElement("div");

@@ -1,12 +1,37 @@
 # Public WiFi Data
 
-A collection of WiFi speed test data from hotels, airlines, and other public locations.
+A collection of WiFi speed test data from hotels, airlines, and other public locations, visualized on an interactive map.
 
 ## About
 
 This repository contains real-world WiFi performance data including download/upload speeds, latency, and jitter measurements from various locations. The data is useful for travelers, researchers, and anyone interested in public WiFi performance.
 
-I know this isn't the most elegant solution, but I wanted to get this project going and hopefully as it grows, I'll continue to make improvements.
+**View the interactive map**: The data is visualized on an interactive map at `index.html` which can be viewed directly on GitHub Pages or by opening the file locally.
+
+## Features
+
+The interactive map includes:
+
+- **Interactive Map Visualization**: Color-coded markers based on download speed (green = fast, red = slow)
+- **Marker Clustering**: Automatically clusters markers when zoomed out for better performance
+- **Speed Filter**: Filter locations by download speed range using dual-handle slider
+- **Category Filtering**: Filter by location type (Hotels, Restaurants, Airline Lounges, etc.)
+- **Statistics Panel**: Real-time statistics showing total locations, average speeds, and fastest/slowest connections
+- **Speed Legend**: Visual guide showing the color-to-speed mapping
+- **Location Search**: Search for cities or zip codes to quickly navigate the map
+- **Enhanced Popups**: Detailed information including category, provider, and speed metrics
+- **Mobile Optimized**: Fully responsive design optimized for mobile devices
+- **Airline Data Table**: Separate table view for airline WiFi data (routes, aircraft types, providers)
+
+## Viewing the Map
+
+You can view the interactive map by:
+
+1. **GitHub Pages** (if enabled): Visit `https://[your-username].github.io/public-wifi-data/`
+2. **Locally**: Open `index.html` in a web browser
+3. **Raw GitHub**: View the raw HTML file on GitHub
+
+Note: The map requires a Mapbox access token (already included in the code) to function properly.
 
 ## Data Format
 
@@ -45,6 +70,32 @@ For restaurant entries, additional fields include:
 - **Website**: Official website URL
 - **Latitude**: Geographic latitude coordinate (decimal degrees)
 - **Longitude**: Geographic longitude coordinate (decimal degrees)
+
+## Using the Map
+
+### Controls
+
+- **Filter Dropdown**: Select a category to filter locations (All, Hotel, Restaurant, Airline Lounge, etc.)
+- **Speed Range Slider**: Adjust the minimum and maximum download speed to filter results
+- **Search Box**: Enter a city name or zip code to fly to that location on the map
+- **Statistics Cards**: View summary statistics for the currently filtered data
+- **Speed Legend**: Reference guide showing what each marker color represents
+
+### Map Interactions
+
+- **Click Markers**: Click any marker to see detailed information in a popup
+- **Click Clusters**: Click clustered markers to zoom in and see individual locations
+- **Zoom & Pan**: Use mouse/touch gestures to navigate the map
+- **Navigation Controls**: Use the zoom buttons in the top-right corner
+
+### Color Coding
+
+Markers are color-coded by download speed:
+- 🟢 **Green** (≥100 Mbps): Excellent
+- 🟡 **Lime** (50-99 Mbps): Good
+- 🟡 **Yellow** (25-49 Mbps): Fair
+- 🟠 **Orange** (10-24 Mbps): Slow
+- 🔴 **Red** (<10 Mbps): Very Slow
 
 ## Contributing
 
