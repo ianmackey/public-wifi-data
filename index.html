@@ -812,8 +812,17 @@
       const maxDownload = downloads.length > 0 ? Math.max(...downloads) : 0;
       const minDownload = downloads.length > 0 ? Math.min(...downloads) : 0;
 
+      // Find the most recent measurement date
+      const dates = locationData
+        .map(row => parseDate(row["Date Measured"]))
+        .filter(date => date !== null);
+      const lastDate = dates.length > 0 
+        ? new Date(Math.max(...dates))
+        : null;
+      const lastDateFormatted = lastDate ? formatDate(lastDate.toISOString().split('T')[0]) : '';
+
       statsPanel.innerHTML = `
-        I've measured ${locationData.length} location${locationData.length !== 1 ? 's' : ''}. Average download speed: ${formatNumber(avgDownload)} Mbps, average upload speed: ${formatNumber(avgUpload)} Mbps. Top speed: ${formatNumber(maxDownload)} Mbps, slowest: ${formatNumber(minDownload)} Mbps.
+        I've measured ${locationData.length} location${locationData.length !== 1 ? 's' : ''}${lastDateFormatted ? ` (last measured: ${lastDateFormatted})` : ''}. Average download speed: ${formatNumber(avgDownload)} Mbps, average upload speed: ${formatNumber(avgUpload)} Mbps. Top speed: ${formatNumber(maxDownload)} Mbps, slowest: ${formatNumber(minDownload)} Mbps.
       `;
     }
 
