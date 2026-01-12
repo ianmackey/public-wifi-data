@@ -97,7 +97,8 @@
     }
     
     #wifi-map {
-      height: 400px;
+      height: calc(100vh - 280px);
+      min-height: 400px;
       border-radius: 4px;
       border: 1px solid rgba(127, 127, 127, 0.35);
     }
@@ -230,12 +231,180 @@
       color: #2563eb;
       font-weight: 500;
     }
+
+    .popup-category {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: rgba(127, 127, 127, 0.15);
+      font-size: 11px;
+      margin-bottom: 6px;
+    }
+
+    .popup-provider {
+      color: #666;
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    #speed-legend {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 12px;
+      border-radius: 4px;
+      border: 1px solid rgba(127, 127, 127, 0.35);
+      font-size: 12px;
+      z-index: 1;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    #speed-legend.hidden {
+      display: none;
+    }
+
+    #speed-legend h3 {
+      margin: 0 0 8px 0;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    #speed-legend .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    #speed-legend .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      flex-shrink: 0;
+    }
+
+    #speed-range-filter {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 200px;
+    }
+
+    #speed-range-filter input[type="range"] {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(127, 127, 127, 0.2);
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    #speed-range-filter input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #2563eb;
+      cursor: pointer;
+    }
+
+    #speed-range-filter input[type="range"]::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #2563eb;
+      cursor: pointer;
+      border: none;
+    }
+
+    #speed-range-filter .range-values {
+      font-size: 12px;
+      min-width: 80px;
+      text-align: right;
+    }
+
+    #statistics-panel {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .stat-card {
+      padding: 12px;
+      border-radius: 4px;
+      border: 1px solid rgba(127, 127, 127, 0.35);
+      background: rgba(127, 127, 127, 0.08);
+    }
+
+    .stat-card .stat-label {
+      font-size: 11px;
+      color: rgba(127, 127, 127, 0.8);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-card .stat-value {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    #wifi-list tbody tr,
+    #wifi-table tbody tr {
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    #wifi-list tbody tr:hover,
+    #wifi-table tbody tr:hover {
+      background: rgba(127, 127, 127, 0.08);
+    }
+
+    .marker-highlighted {
+      animation: pulse 1s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      }
+      50% {
+        transform: scale(1.2);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.3);
+      }
+    }
+
+    .cluster-marker {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(37, 99, 235, 0.8);
+      border: 3px solid #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
   <div id="wifi-map-container">
     <div id="wifi-controls"></div>
-    <div id="wifi-map"></div>
+    <div id="statistics-panel"></div>
+    <div style="position: relative;">
+      <div id="wifi-map"></div>
+      <div id="speed-legend"></div>
+    </div>
     <div id="wifi-list"></div>
     <div id="wifi-table"></div>
   </div>
@@ -254,6 +423,11 @@
     let currentView = "map"; // "map" or "list"
     let listSortState = { column: null, direction: null };
     let tableSortState = { column: null, direction: null };
+    let speedRange = { min: 0, max: 1000 };
+    let dataMap = new Map(); // Map row data to markers for click-to-fly
+    let highlightedMarker = null;
+    let geoJsonSource = null;
+    let mapListenersAdded = false;
 
     // ─────────────────────────────────────────────────────────────
     // Utilities
@@ -303,14 +477,26 @@
     // ─────────────────────────────────────────────────────────────
     // Data filtering & sorting
     // ─────────────────────────────────────────────────────────────
-    function filterData(data, category) {
+    function filterData(data, category, speedFilter = null) {
+      let filtered = data;
+      
       if (category === "all") {
-        return data.filter(row => row.Category !== "Airline" && row.Latitude != null && row.Longitude != null);
+        filtered = data.filter(row => row.Category !== "Airline" && row.Latitude != null && row.Longitude != null);
+      } else if (isAirlineCategory(category)) {
+        filtered = data.filter(row => row.Category === "Airline");
+      } else {
+        filtered = data.filter(row => row.Category === category && row.Latitude != null && row.Longitude != null);
       }
-      if (isAirlineCategory(category)) {
-        return data.filter(row => row.Category === "Airline");
+
+      // Apply speed filter if provided
+      if (speedFilter) {
+        filtered = filtered.filter(row => {
+          const download = toNumber(row["Download (Mbps)"]) || 0;
+          return download >= speedFilter.min && download <= speedFilter.max;
+        });
       }
-      return data.filter(row => row.Category === category && row.Latitude != null && row.Longitude != null);
+
+      return filtered;
     }
 
     function sortData(data, column, direction) {
@@ -355,11 +541,60 @@
     function clearMarkers() {
       markers.forEach(m => m.remove());
       markers = [];
+      dataMap.clear();
+      if (highlightedMarker) {
+        highlightedMarker = null;
+      }
+      // Remove clustering source and layers if they exist
+      if (map.getSource('wifi-points')) {
+        if (map.getLayer('wifi-clusters')) map.removeLayer('wifi-clusters');
+        if (map.getLayer('wifi-cluster-count')) map.removeLayer('wifi-cluster-count');
+        if (map.getLayer('wifi-unclustered-point')) map.removeLayer('wifi-unclustered-point');
+        map.removeSource('wifi-points');
+      }
+    }
+
+    function createPopupHTML(row) {
+      const download = toNumber(row["Download (Mbps)"]) || 0;
+      const upload = toNumber(row["Upload (Mbps)"]) || 0;
+      const latency = toNumber(row["Latency (ms)"]);
+      const nameHtml = row.Website 
+        ? `<a href="${row.Website}" target="_blank" rel="noopener noreferrer">${row.Name || "Unknown"}</a>`
+        : (row.Name || "Unknown");
+      const categoryBadge = row.Category 
+        ? `<div class="popup-category">${row.Category}</div>`
+        : "";
+      const providerInfo = row.Provider 
+        ? `<div class="popup-provider">Provider: ${row.Provider}</div>`
+        : "";
+
+      return `
+        <div class="popup-name">${nameHtml}</div>
+        ${categoryBadge}
+        <div>${row.Address || ""}</div>
+        <div class="popup-speed">↓ ${formatNumber(download)} Mbps</div>
+        <div>↑ ${formatNumber(upload)} Mbps</div>
+        <div>Latency: ${latency !== null ? formatNumber(latency) + " ms" : "N/A"}</div>
+        ${providerInfo}
+        <div style="color: #666; font-size: 11px; margin-top: 4px;">${formatDate(row["Date Measured"])}</div>
+      `;
     }
 
     function addMarkers(data) {
+      if (!map || !map.loaded()) {
+        // If map isn't loaded yet, wait for it
+        if (map) {
+          map.once('load', () => addMarkers(data));
+        }
+        return;
+      }
+
       clearMarkers();
       const bounds = new mapboxgl.LngLatBounds();
+
+      // Create GeoJSON for clustering
+      const features = [];
+      const rowToFeatureMap = new Map();
 
       data.forEach(row => {
         const lat = toNumber(row.Latitude);
@@ -369,37 +604,148 @@
         const download = toNumber(row["Download (Mbps)"]) || 0;
         const color = getSpeedColor(download);
 
-        const el = document.createElement("div");
-        el.style.cssText = `
-          width: 16px;
-          height: 16px;
-          border-radius: 50%;
-          background-color: ${color};
-          border: 2px solid #fff;
-          box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-          cursor: pointer;
-        `;
+        const feature = {
+          type: 'Feature',
+          properties: {
+            download: download,
+            color: color,
+            rowData: row
+          },
+          geometry: {
+            type: 'Point',
+            coordinates: [lng, lat]
+          }
+        };
 
-        const nameHtml = row.Website 
-          ? `<a href="${row.Website}" target="_blank" rel="noopener noreferrer">${row.Name || "Unknown"}</a>`
-          : (row.Name || "Unknown");
-
-        const popup = new mapboxgl.Popup({ offset: 12 }).setHTML(`
-          <div class="popup-name">${nameHtml}</div>
-          <div>${row.Address || ""}</div>
-          <div class="popup-speed">↓ ${formatNumber(download)} Mbps</div>
-          <div>↑ ${formatNumber(toNumber(row["Upload (Mbps)"]))} Mbps</div>
-          <div>Latency: ${formatNumber(toNumber(row["Latency (ms)"]))} ms</div>
-          <div style="color: #666; font-size: 11px; margin-top: 4px;">${formatDate(row["Date Measured"])}</div>
-        `);
-
-        const marker = new mapboxgl.Marker(el)
-          .setLngLat([lng, lat])
-          .setPopup(popup)
-          .addTo(map);
-
-        markers.push(marker);
+        features.push(feature);
+        rowToFeatureMap.set(row, feature);
         bounds.extend([lng, lat]);
+      });
+
+      if (features.length === 0) return;
+
+      // Add source with clustering
+      map.addSource('wifi-points', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: features
+        },
+        cluster: true,
+        clusterMaxZoom: 14,
+        clusterRadius: 50
+      });
+
+      // Add cluster circles
+      map.addLayer({
+        id: 'wifi-clusters',
+        type: 'circle',
+        source: 'wifi-points',
+        filter: ['has', 'point_count'],
+        paint: {
+          'circle-color': '#2563eb',
+          'circle-radius': [
+            'step',
+            ['get', 'point_count'],
+            20,
+            10, 30,
+            30, 40,
+            100, 50
+          ]
+        }
+      });
+
+      // Add cluster count labels
+      map.addLayer({
+        id: 'wifi-cluster-count',
+        type: 'symbol',
+        source: 'wifi-points',
+        filter: ['has', 'point_count'],
+        layout: {
+          'text-field': '{point_count_abbreviated}',
+          'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+          'text-size': 12
+        },
+        paint: {
+          'text-color': '#fff'
+        }
+      });
+
+      // Add unclustered points
+      map.addLayer({
+        id: 'wifi-unclustered-point',
+        type: 'circle',
+        source: 'wifi-points',
+        filter: ['!', ['has', 'point_count']],
+        paint: {
+          'circle-color': ['get', 'color'],
+          'circle-radius': 8,
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#fff'
+        }
+      });
+
+      // Add event listeners only once
+      if (!mapListenersAdded) {
+        // Click on cluster to zoom in
+        map.on('click', 'wifi-clusters', (e) => {
+          const features = map.queryRenderedFeatures(e.point, {
+            layers: ['wifi-clusters']
+          });
+          if (features.length === 0) return;
+          const clusterId = features[0].properties.cluster_id;
+          map.getSource('wifi-points').getClusterExpansionZoom(clusterId, (err, zoom) => {
+            if (err) return;
+            map.easeTo({
+              center: features[0].geometry.coordinates,
+              zoom: zoom
+            });
+          });
+        });
+
+        // Click on point to show popup
+        map.on('click', 'wifi-unclustered-point', (e) => {
+          if (e.features.length === 0) return;
+          const row = e.features[0].properties.rowData;
+          const coordinates = e.features[0].geometry.coordinates.slice();
+          const popup = new mapboxgl.Popup({ offset: 12 })
+            .setLngLat(coordinates)
+            .setHTML(createPopupHTML(row))
+            .addTo(map);
+        });
+
+        // Change cursor on hover
+        map.on('mouseenter', 'wifi-clusters', () => {
+          map.getCanvas().style.cursor = 'pointer';
+        });
+        map.on('mouseleave', 'wifi-clusters', () => {
+          map.getCanvas().style.cursor = '';
+        });
+        map.on('mouseenter', 'wifi-unclustered-point', () => {
+          map.getCanvas().style.cursor = 'pointer';
+        });
+        map.on('mouseleave', 'wifi-unclustered-point', () => {
+          map.getCanvas().style.cursor = '';
+        });
+
+        mapListenersAdded = true;
+      }
+
+      // Store row to feature mapping for click-to-fly
+      data.forEach(row => {
+        const feature = rowToFeatureMap.get(row);
+        if (feature) {
+          const marker = {
+            getElement: () => null,
+            togglePopup: () => {
+              const popup = new mapboxgl.Popup({ offset: 12 })
+                .setLngLat(feature.geometry.coordinates)
+                .setHTML(createPopupHTML(row))
+                .addTo(map);
+            }
+          };
+          dataMap.set(row, marker);
+        }
       });
 
       if (data.length > 0) {
@@ -407,9 +753,40 @@
       }
     }
 
+    function flyToLocation(row) {
+      const lat = toNumber(row.Latitude);
+      const lng = toNumber(row.Longitude);
+      if (lat === null || lng === null) return;
+
+      // Switch to map view if in list view
+      if (currentView !== "map") {
+        currentView = "map";
+        updateViewToggle();
+        updateView();
+        // Wait for map to update before flying
+        setTimeout(() => flyToLocation(row), 100);
+        return;
+      }
+
+      // Fly to location
+      map.flyTo({
+        center: [lng, lat],
+        zoom: 15,
+        duration: 1000
+      });
+
+      // Show popup after fly animation
+      setTimeout(() => {
+        const popup = new mapboxgl.Popup({ offset: 12 })
+          .setLngLat([lng, lat])
+          .setHTML(createPopupHTML(row))
+          .addTo(map);
+      }, 1100);
+    }
+
     async function searchLocation(query) {
       if (!query) {
-        const filtered = filterData(allData, currentCategory);
+        const filtered = filterData(allData, currentCategory, speedRange);
         if (currentView === "map") {
           addMarkers(filtered);
         }
@@ -445,7 +822,7 @@
     // ─────────────────────────────────────────────────────────────
     function renderList(data) {
       const listContainer = document.getElementById("wifi-list");
-      const columns = ["Name", "Category", "Address", "Download (Mbps)", "Upload (Mbps)", "Latency (ms)", "Date Measured"];
+      const columns = ["Name", "Category", "Download (Mbps)", "Upload (Mbps)", "Latency (ms)", "Date Measured"];
       
       const sortedData = sortData(data, listSortState.column, listSortState.direction);
 
@@ -497,6 +874,10 @@
       
       sortedData.forEach(row => {
         const tr = document.createElement("tr");
+        tr.dataset.rowData = JSON.stringify(row);
+        tr.addEventListener("click", () => {
+          flyToLocation(row);
+        });
         
         columns.forEach(col => {
           const td = document.createElement("td");
@@ -514,6 +895,7 @@
               a.target = "_blank";
               a.rel = "noopener noreferrer";
               a.textContent = row[col] || "";
+              a.onclick = (e) => e.stopPropagation(); // Prevent row click when clicking link
               td.appendChild(a);
             } else {
               td.appendChild(document.createTextNode(row[col] || ""));
@@ -521,7 +903,8 @@
           } else if (col === "Date Measured") {
             td.textContent = formatDate(row[col]);
           } else if (["Download (Mbps)", "Upload (Mbps)", "Latency (ms)", "Jitter (ms)"].includes(col)) {
-            td.textContent = formatNumber(toNumber(row[col]));
+            const val = toNumber(row[col]);
+            td.textContent = val !== null ? formatNumber(val) : "N/A";
           } else {
             td.textContent = row[col] || "";
           }
@@ -609,7 +992,8 @@
           } else if (col === "Date Measured") {
             td.textContent = formatDate(row[col]);
           } else if (["Download (Mbps)", "Upload (Mbps)", "Latency (ms)", "Jitter (ms)"].includes(col)) {
-            td.textContent = formatNumber(toNumber(row[col]));
+            const val = toNumber(row[col]);
+            td.textContent = val !== null ? formatNumber(val) : "N/A";
           } else {
             td.textContent = row[col] || "";
           }
@@ -645,8 +1029,13 @@
       const tableEl = document.getElementById("wifi-table");
       const searchWrapper = document.querySelector(".search-wrapper");
       const viewToggleWrapper = document.querySelector(".view-toggle-wrapper");
+      const legendEl = document.getElementById("speed-legend");
+      const speedFilterWrapper = document.getElementById("speed-range-filter");
       
-      const filtered = filterData(allData, currentCategory);
+      const filtered = filterData(allData, currentCategory, speedRange);
+
+      // Update statistics
+      updateStatistics(filtered);
 
       if (isAirlineCategory(currentCategory)) {
         // Airline view: show table only
@@ -655,6 +1044,8 @@
         tableEl.classList.add("visible");
         searchWrapper?.classList.add("hidden");
         viewToggleWrapper?.classList.add("hidden");
+        if (legendEl) legendEl.classList.add("hidden");
+        if (speedFilterWrapper) speedFilterWrapper.style.display = "none";
         clearMarkers();
         renderTable(filtered);
       } else {
@@ -662,6 +1053,8 @@
         tableEl.classList.remove("visible");
         searchWrapper?.classList.remove("hidden");
         viewToggleWrapper?.classList.remove("hidden");
+        if (legendEl) legendEl.classList.remove("hidden");
+        if (speedFilterWrapper) speedFilterWrapper.style.display = "flex";
         
         if (currentView === "map") {
           mapEl.classList.remove("hidden");
@@ -673,6 +1066,144 @@
           clearMarkers();
           renderList(filtered);
         }
+      }
+    }
+
+    function updateStatistics(data) {
+      const statsPanel = document.getElementById("statistics-panel");
+      if (!statsPanel) return;
+
+      const locationData = data.filter(row => row.Latitude != null && row.Longitude != null);
+      const downloads = locationData.map(row => toNumber(row["Download (Mbps)"])).filter(v => v !== null);
+      const uploads = locationData.map(row => toNumber(row["Upload (Mbps)"])).filter(v => v !== null);
+
+      const avgDownload = downloads.length > 0 
+        ? downloads.reduce((a, b) => a + b, 0) / downloads.length 
+        : 0;
+      const avgUpload = uploads.length > 0 
+        ? uploads.reduce((a, b) => a + b, 0) / uploads.length 
+        : 0;
+      const maxDownload = downloads.length > 0 ? Math.max(...downloads) : 0;
+      const minDownload = downloads.length > 0 ? Math.min(...downloads) : 0;
+
+      statsPanel.innerHTML = `
+        <div class="stat-card">
+          <div class="stat-label">Total Locations</div>
+          <div class="stat-value">${locationData.length}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Avg Download</div>
+          <div class="stat-value">${formatNumber(avgDownload)} Mbps</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Avg Upload</div>
+          <div class="stat-value">${formatNumber(avgUpload)} Mbps</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Fastest</div>
+          <div class="stat-value">${formatNumber(maxDownload)} Mbps</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Slowest</div>
+          <div class="stat-value">${formatNumber(minDownload)} Mbps</div>
+        </div>
+      `;
+    }
+
+    function createSpeedLegend() {
+      const legend = document.getElementById("speed-legend");
+      if (!legend) return;
+
+      legend.innerHTML = `
+        <h3>Download Speed</h3>
+        <div class="legend-item">
+          <div class="legend-dot" style="background-color: #22c55e;"></div>
+          <span>≥ 100 Mbps</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background-color: #84cc16;"></div>
+          <span>50 - 99 Mbps</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background-color: #eab308;"></div>
+          <span>25 - 49 Mbps</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background-color: #f97316;"></div>
+          <span>10 - 24 Mbps</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background-color: #ef4444;"></div>
+          <span>&lt; 10 Mbps</span>
+        </div>
+      `;
+    }
+
+    function createSpeedRangeFilter() {
+      const controls = document.getElementById("wifi-controls");
+      if (!controls) return;
+
+      const speedFilterWrapper = document.createElement("div");
+      speedFilterWrapper.id = "speed-range-filter";
+      speedFilterWrapper.style.display = "none"; // Hidden by default, shown for location-based views
+
+      const label = document.createElement("label");
+      label.textContent = "Speed: ";
+      label.style.fontWeight = "500";
+
+      const minInput = document.createElement("input");
+      minInput.type = "range";
+      minInput.min = "0";
+      minInput.max = "500";
+      minInput.value = "0";
+      minInput.id = "speed-min";
+
+      const maxInput = document.createElement("input");
+      maxInput.type = "range";
+      maxInput.min = "0";
+      maxInput.max = "500";
+      maxInput.value = "500";
+      maxInput.id = "speed-max";
+
+      const valuesDisplay = document.createElement("div");
+      valuesDisplay.className = "range-values";
+      valuesDisplay.textContent = "0 - 500+ Mbps";
+
+      function updateSpeedFilter() {
+        const min = parseInt(minInput.value);
+        const max = parseInt(maxInput.value);
+        
+        // Ensure min <= max
+        if (min > max) {
+          if (minInput === document.activeElement) {
+            maxInput.value = min;
+          } else {
+            minInput.value = max;
+          }
+        }
+
+        const finalMin = parseInt(minInput.value);
+        const finalMax = parseInt(maxInput.value);
+        speedRange = { min: finalMin, max: finalMax === 500 ? 1000 : finalMax };
+        
+        valuesDisplay.textContent = `${finalMin} - ${finalMax === 500 ? "500+" : finalMax} Mbps`;
+        updateView();
+      }
+
+      minInput.addEventListener("input", updateSpeedFilter);
+      maxInput.addEventListener("input", updateSpeedFilter);
+
+      speedFilterWrapper.appendChild(label);
+      speedFilterWrapper.appendChild(minInput);
+      speedFilterWrapper.appendChild(maxInput);
+      speedFilterWrapper.appendChild(valuesDisplay);
+
+      // Insert after category filter
+      const categoryFilter = document.getElementById("category-filter");
+      if (categoryFilter && categoryFilter.parentElement) {
+        categoryFilter.parentElement.parentElement.insertBefore(speedFilterWrapper, categoryFilter.parentElement.nextSibling);
+      } else {
+        controls.appendChild(speedFilterWrapper);
       }
     }
 
@@ -704,6 +1235,11 @@
         currentCategory = e.target.value;
         listSortState = { column: null, direction: null };
         tableSortState = { column: null, direction: null };
+        speedRange = { min: 0, max: 1000 }; // Reset speed filter
+        const minInput = document.getElementById("speed-min");
+        const maxInput = document.getElementById("speed-max");
+        if (minInput) minInput.value = "0";
+        if (maxInput) maxInput.value = "500";
         if (!isAirlineCategory(currentCategory)) {
           currentView = "map"; // Reset to map when switching categories
         }
@@ -799,7 +1335,13 @@
       map.addControl(new mapboxgl.NavigationControl(), "top-right");
 
       createControls(getCategories(allData));
-      updateView();
+      createSpeedRangeFilter();
+      createSpeedLegend();
+
+      // Wait for map to load before adding sources
+      map.on('load', () => {
+        updateView();
+      });
 
     } catch (err) {
       document.getElementById("wifi-map").textContent = `Error: ${err.message}`;
