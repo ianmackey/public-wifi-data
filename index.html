@@ -477,7 +477,34 @@
     // ─────────────────────────────────────────────────────────────
     function filterData(data) {
       // Always show location-based data (exclude airlines which don't have coordinates)
-      return data.filter(row => row.Category !== "Airline" && row.Latitude != null && row.Longitude != null);
+      let filtered = data.filter(row => row.Category !== "Airline" && row.Latitude != null && row.Longitude != null);
+      
+      // Deduplicate: keep only the most recent entry for each location
+      // Use Name + Latitude + Longitude as unique key
+      const locationMap = new Map();
+      
+      filtered.forEach(row => {
+        const key = `${row.Name || ""}_${row.Latitude}_${row.Longitude}`;
+        const existing = locationMap.get(key);
+        
+        if (!existing) {
+          locationMap.set(key, row);
+        } else {
+          // Compare dates - keep the most recent
+          const existingDate = parseDate(existing["Date Measured"]);
+          const currentDate = parseDate(row["Date Measured"]);
+          
+          if (currentDate && existingDate) {
+            if (currentDate > existingDate) {
+              locationMap.set(key, row);
+            }
+          } else if (currentDate && !existingDate) {
+            locationMap.set(key, row);
+          }
+        }
+      });
+      
+      return Array.from(locationMap.values());
     }
 
     function sortData(data, column, direction) {
@@ -549,7 +576,7 @@
         <div>↑ ${formatNumber(upload)} Mbps</div>
         <div>Latency: ${latency !== null ? formatNumber(latency) + " ms" : "N/A"}</div>
         ${providerInfo}
-        <div style="color: #666; font-size: 11px; margin-top: 4px;">${formatDate(row["Date Measured"])}</div>
+        <div style="color: #666; font-size: 11px; margin-top: 4px;">Date measured: ${formatDate(row["Date Measured"])}</div>
       `;
     }
 
