@@ -14,6 +14,7 @@ import base64
 import json
 import os
 import sys
+import time
 from datetime import date
 
 try:
@@ -33,35 +34,83 @@ CATEGORIES = ["Hotel", "Airport", "Restaurant", "Airline", "Airline Lounge"]
 
 
 # ─────────────────────────────────────────────────────────────
-# Speed Test
+# Speed Test (via Cloudflare)
 # ─────────────────────────────────────────────────────────────
 
+CLOUDFLARE_SPEED_URL = "https://speed.cloudflare.com"
+
+
+def _measure_latency(rounds=5):
+    """Measure latency by timing small requests to Cloudflare's edge."""
+    times = []
+    for _ in range(rounds):
+        start = time.time()
+        requests.get(
+            f"{CLOUDFLARE_SPEED_URL}/__down?bytes=0",
+            timeout=10,
+        )
+        elapsed = (time.time() - start) * 1000
+        times.append(elapsed)
+    times.sort()
+    return round(times[len(times) // 2], 2)
+
+
+def _measure_download(duration=10):
+    """Measure download speed by fetching data from Cloudflare's edge."""
+    chunk_size = 25_000_000  # 25 MB per request
+    total_bytes = 0
+    start = time.time()
+
+    while (time.time() - start) < duration:
+        resp = requests.get(
+            f"{CLOUDFLARE_SPEED_URL}/__down?bytes={chunk_size}",
+            timeout=30,
+        )
+        total_bytes += len(resp.content)
+        elapsed = time.time() - start
+        mbps = (total_bytes * 8) / (elapsed * 1_000_000)
+        print(f"\r  Download: {mbps:.1f} Mbps...", end="", flush=True)
+
+    elapsed = time.time() - start
+    mbps = round((total_bytes * 8) / (elapsed * 1_000_000), 2)
+    print(f"\r  Download: {mbps} Mbps        ")
+    return mbps
+
+
+def _measure_upload(duration=10):
+    """Measure upload speed by posting data to Cloudflare's edge."""
+    chunk_size = 10_000_000  # 10 MB per request
+    payload = b"0" * chunk_size
+    total_bytes = 0
+    start = time.time()
+
+    while (time.time() - start) < duration:
+        requests.post(
+            f"{CLOUDFLARE_SPEED_URL}/__up",
+            data=payload,
+            timeout=30,
+        )
+        total_bytes += chunk_size
+        elapsed = time.time() - start
+        mbps = (total_bytes * 8) / (elapsed * 1_000_000)
+        print(f"\r  Upload:   {mbps:.1f} Mbps...", end="", flush=True)
+
+    elapsed = time.time() - start
+    mbps = round((total_bytes * 8) / (elapsed * 1_000_000), 2)
+    print(f"\r  Upload:   {mbps} Mbps        ")
+    return mbps
+
+
 def run_speedtest():
-    """Run a speed test using speedtest-cli."""
-    print("\nRunning speed test...")
-    try:
-        import speedtest as st
-    except ImportError:
-        print("Missing dependency: speedtest-cli")
-        print("Install with: pip install speedtest-cli")
-        sys.exit(1)
+    """Run a speed test against Cloudflare's edge network."""
+    print("\nRunning speed test (via Cloudflare)...")
 
-    s = st.Speedtest()
-    s.get_best_server()
-
-    print("  Testing download...")
-    s.download()
-    print("  Testing upload...")
-    s.upload()
-
-    results = s.results.dict()
-    download_mbps = round(results["download"] / 1_000_000, 2)
-    upload_mbps = round(results["upload"] / 1_000_000, 2)
-    latency_ms = round(results["ping"], 2)
-
-    print(f"  Download: {download_mbps} Mbps")
-    print(f"  Upload:   {upload_mbps} Mbps")
+    print("  Measuring latency...")
+    latency_ms = _measure_latency()
     print(f"  Latency:  {latency_ms} ms")
+
+    download_mbps = _measure_download()
+    upload_mbps = _measure_upload()
 
     return {
         "download_mbps": download_mbps,

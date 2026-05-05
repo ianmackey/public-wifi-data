@@ -131,12 +131,11 @@ The tool will:
   Public WiFi Speed Test
 ==================================================
 
-Running speed test...
-  Testing download...
-  Testing upload...
+Running speed test (via Cloudflare)...
+  Measuring latency...
+  Latency:  12.5 ms
   Download: 91.5 Mbps
-  Upload:   90.5 Mbps
-  Latency:  19.0 ms
+  Upload:   45.2 Mbps
 
 Category:
   1) Hotel
