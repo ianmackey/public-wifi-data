@@ -42,8 +42,9 @@ def run_speedtest():
     print("\nRunning speed test...")
     try:
         return _run_ookla_cli()
-    except (FileNotFoundError, OSError):
-        pass
+    except (FileNotFoundError, OSError) as e:
+        print(f"  Ookla CLI not available or failed: {e}")
+        print("  Trying speedtest-cli fallback...")
 
     try:
         return _run_speedtest_cli()
@@ -64,9 +65,19 @@ def _run_ookla_cli():
         capture_output=True, text=True, timeout=120
     )
     if result.returncode != 0:
-        raise OSError(f"speedtest exited with code {result.returncode}")
+        raise OSError(
+            f"speedtest exited with code {result.returncode}: "
+            f"{result.stderr.strip() or result.stdout.strip()}"
+        )
 
-    data = json.loads(result.stdout)
+    stdout = result.stdout.strip()
+    if not stdout:
+        raise OSError("speedtest produced no output (may need manual license acceptance — run 'speedtest' once manually)")
+
+    try:
+        data = json.loads(stdout)
+    except json.JSONDecodeError:
+        raise OSError(f"speedtest produced non-JSON output: {stdout[:200]}")
     download_mbps = round(data["download"]["bandwidth"] / 125000, 2)
     upload_mbps = round(data["upload"]["bandwidth"] / 125000, 2)
     latency_ms = round(data["ping"]["latency"], 2)
