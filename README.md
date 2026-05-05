@@ -115,7 +115,7 @@ export GITHUB_TOKEN=ghp_your_token_here
 ### Usage
 
 ```bash
-python speedtest.py
+python wifitest.py
 ```
 
 The tool will:
