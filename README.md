@@ -47,6 +47,7 @@ The data is stored in JSON format with the following structure:
 
 For airline entries, additional fields include:
 - **Airline**: Airline name
+- **Tail Number**: Aircraft tail/registration number (e.g., "N178JB")
 - **Aircraft Type**: Aircraft model
 - **Route**: Flight route (e.g., "LAX-JFK")
 - **Provider**: WiFi provider name
@@ -100,9 +101,6 @@ A Python CLI tool is included for quickly running a speed test and pushing resul
 ### Prerequisites
 
 - Python 3.8+
-- A speed test tool (either one):
-  - **Ookla Speedtest CLI** (recommended — includes jitter): https://www.speedtest.net/apps/cli
-  - **Python speedtest-cli** (fallback — no jitter): `pip install speedtest-cli`
 - A [GitHub personal access token](https://github.com/settings/tokens) with `public_repo` scope
 
 ### Setup
@@ -119,7 +117,7 @@ python wifitest.py
 ```
 
 The tool will:
-1. Run a speed test (download, upload, latency, jitter)
+1. Run a speed test (download, upload, latency)
 2. Detect your approximate location via IP
 3. Prompt you to verify/correct the location
 4. Ask for category and category-specific details
@@ -134,11 +132,11 @@ The tool will:
 ==================================================
 
 Running speed test...
+  Testing download...
+  Testing upload...
   Download: 91.5 Mbps
   Upload:   90.5 Mbps
   Latency:  19.0 ms
-  Jitter:   5.0 ms
-  (via Ookla Speedtest CLI)
 
 Category:
   1) Hotel
@@ -171,7 +169,7 @@ Website URL: https://www.hilton.com/...
   "Download (Mbps)": 91.5,
   "Upload (Mbps)": 90.5,
   "Latency (ms)": 19.0,
-  "Jitter (ms)": 5.0
+  "Jitter (ms)": null
 }
 
 Push this entry to GitHub? [Y/n]: y

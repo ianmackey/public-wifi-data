@@ -13,7 +13,6 @@ Usage:
 import base64
 import json
 import os
-import subprocess
 import sys
 from datetime import date
 
@@ -34,72 +33,18 @@ CATEGORIES = ["Hotel", "Airport", "Restaurant", "Airline", "Airline Lounge"]
 
 
 # ─────────────────────────────────────────────────────────────
-# Speed Test Backends
+# Speed Test
 # ─────────────────────────────────────────────────────────────
 
 def run_speedtest():
-    """Run a speed test. Tries Ookla CLI first, falls back to speedtest-cli."""
+    """Run a speed test using speedtest-cli."""
     print("\nRunning speed test...")
     try:
-        return _run_ookla_cli()
-    except (FileNotFoundError, OSError) as e:
-        print(f"  Ookla CLI not available or failed: {e}")
-        print("  Trying speedtest-cli fallback...")
-
-    try:
-        return _run_speedtest_cli()
+        import speedtest as st
     except ImportError:
-        pass
-
-    print("No speed test tool found.")
-    print("Install one of:")
-    print("  - Ookla Speedtest CLI: https://www.speedtest.net/apps/cli")
-    print("  - Python speedtest-cli: pip install speedtest-cli")
-    sys.exit(1)
-
-
-def _run_ookla_cli():
-    """Run the official Ookla Speedtest CLI and parse JSON output."""
-    result = subprocess.run(
-        ["speedtest", "--format=json", "--accept-license", "--accept-gdpr"],
-        capture_output=True, text=True, timeout=120
-    )
-    if result.returncode != 0:
-        raise OSError(
-            f"speedtest exited with code {result.returncode}: "
-            f"{result.stderr.strip() or result.stdout.strip()}"
-        )
-
-    stdout = result.stdout.strip()
-    if not stdout:
-        raise OSError("speedtest produced no output (may need manual license acceptance — run 'speedtest' once manually)")
-
-    try:
-        data = json.loads(stdout)
-    except json.JSONDecodeError:
-        raise OSError(f"speedtest produced non-JSON output: {stdout[:200]}")
-    download_mbps = round(data["download"]["bandwidth"] / 125000, 2)
-    upload_mbps = round(data["upload"]["bandwidth"] / 125000, 2)
-    latency_ms = round(data["ping"]["latency"], 2)
-    jitter_ms = round(data["ping"]["jitter"], 2)
-
-    print(f"  Download: {download_mbps} Mbps")
-    print(f"  Upload:   {upload_mbps} Mbps")
-    print(f"  Latency:  {latency_ms} ms")
-    print(f"  Jitter:   {jitter_ms} ms")
-    print("  (via Ookla Speedtest CLI)")
-
-    return {
-        "download_mbps": download_mbps,
-        "upload_mbps": upload_mbps,
-        "latency_ms": latency_ms,
-        "jitter_ms": jitter_ms,
-    }
-
-
-def _run_speedtest_cli():
-    """Run the Python speedtest-cli library."""
-    import speedtest as st
+        print("Missing dependency: speedtest-cli")
+        print("Install with: pip install speedtest-cli")
+        sys.exit(1)
 
     s = st.Speedtest()
     s.get_best_server()
@@ -117,14 +62,11 @@ def _run_speedtest_cli():
     print(f"  Download: {download_mbps} Mbps")
     print(f"  Upload:   {upload_mbps} Mbps")
     print(f"  Latency:  {latency_ms} ms")
-    print("  Jitter:   N/A (install Ookla CLI for jitter)")
-    print("  (via speedtest-cli)")
 
     return {
         "download_mbps": download_mbps,
         "upload_mbps": upload_mbps,
         "latency_ms": latency_ms,
-        "jitter_ms": None,
     }
 
 
@@ -289,6 +231,7 @@ def prompt_category_fields(category):
 
     elif category == "Airline":
         fields["Airline"] = prompt_input("Airline name")
+        fields["Tail Number"] = prompt_input("Tail number (e.g. 'N178JB')", required=False)
         fields["Aircraft Type"] = prompt_input("Aircraft type (e.g. 'A321')", required=False)
         fields["Route"] = prompt_input("Route (e.g. 'LAX-JFK')", required=False)
         fields["Provider"] = prompt_input("WiFi provider (e.g. 'Viasat')", required=False)
@@ -405,7 +348,7 @@ def main():
     entry["Download (Mbps)"] = speed["download_mbps"]
     entry["Upload (Mbps)"] = speed["upload_mbps"]
     entry["Latency (ms)"] = speed["latency_ms"]
-    entry["Jitter (ms)"] = speed["jitter_ms"]
+    entry["Jitter (ms)"] = None
 
     print("\n── Preview ──")
     print(json.dumps(entry, indent=2))
