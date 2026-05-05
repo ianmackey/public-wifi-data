@@ -93,6 +93,93 @@ Markers are color-coded by download speed:
 - 🟠 **Orange** (10-24 Mbps): Slow
 - 🔴 **Red** (<10 Mbps): Very Slow
 
+## Adding Speed Test Data (CLI)
+
+A Python CLI tool is included for quickly running a speed test and pushing results to this repo.
+
+### Prerequisites
+
+- Python 3.8+
+- A speed test tool (either one):
+  - **Ookla Speedtest CLI** (recommended — includes jitter): https://www.speedtest.net/apps/cli
+  - **Python speedtest-cli** (fallback — no jitter): `pip install speedtest-cli`
+- A [GitHub personal access token](https://github.com/settings/tokens) with `public_repo` scope
+
+### Setup
+
+```bash
+pip install -r requirements.txt
+export GITHUB_TOKEN=ghp_your_token_here
+```
+
+### Usage
+
+```bash
+python speedtest.py
+```
+
+The tool will:
+1. Run a speed test (download, upload, latency, jitter)
+2. Detect your approximate location via IP
+3. Prompt you to verify/correct the location
+4. Ask for category and category-specific details
+5. Show a preview of the entry
+6. Push directly to `wifi-data.json` via the GitHub API
+
+### Example Session
+
+```
+==================================================
+  Public WiFi Speed Test
+==================================================
+
+Running speed test...
+  Download: 91.5 Mbps
+  Upload:   90.5 Mbps
+  Latency:  19.0 ms
+  Jitter:   5.0 ms
+  (via Ookla Speedtest CLI)
+
+Category:
+  1) Hotel
+  2) Airport
+  3) Restaurant
+  4) Airline
+  5) Airline Lounge
+Select [1-5]: 1
+
+── Location ──
+  Detected: San Francisco, California, United States (37.7749, -122.4194)
+
+  1) Accept detected location
+  2) Search by place name
+  3) Enter coordinates manually
+Select [1-3]: 1
+Location name: Hilton San Francisco Union Square
+
+── Hotel Details ──
+Website URL: https://www.hilton.com/...
+
+── Preview ──
+{
+  "Date Measured": "2026-05-05",
+  "Name": "Hilton San Francisco Union Square",
+  "Category": "Hotel",
+  "Website": "https://www.hilton.com/...",
+  "Latitude": 37.7749,
+  "Longitude": -122.4194,
+  "Download (Mbps)": 91.5,
+  "Upload (Mbps)": 90.5,
+  "Latency (ms)": 19.0,
+  "Jitter (ms)": 5.0
+}
+
+Push this entry to GitHub? [Y/n]: y
+
+Pushing to GitHub...
+Done! Entry added to wifi-data.json
+```
+
 ## Contributing
 
 I'll be adding support for contributions soon - likely through simple form submission.
