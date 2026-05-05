@@ -7,7 +7,7 @@ directly to the ianmackey/public-wifi-data repo via the GitHub API.
 
 Usage:
     export GITHUB_TOKEN=ghp_...
-    python speedtest.py
+    python wifitest.py
 """
 
 import base64
