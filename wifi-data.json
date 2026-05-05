@@ -5,7 +5,7 @@
     "Category": "Hotel",
     "Website": "https://www.hyatt.com/jdv-by-hyatt/en-US/lgajd-jdv-50-bowery",
     "Latitude": 40.7178,
-    "Longitude": -73.9970,
+    "Longitude": -73.997,
     "Download (Mbps)": 28.3,
     "Upload (Mbps)": 28.1,
     "Latency (ms)": 15.4,
@@ -16,7 +16,7 @@
     "Name": "Sofitel London Heathrow",
     "Category": "Hotel",
     "Website": "https://sofitel.accor.com/en/hotels/6214.html",
-    "Latitude": 51.4700,
+    "Latitude": 51.47,
     "Longitude": -0.4543,
     "Download (Mbps)": 44.8,
     "Upload (Mbps)": 75.7,
@@ -40,8 +40,8 @@
     "Name": "citizenM New York Bowery Hotel",
     "Category": "Hotel",
     "Website": "https://www.marriott.com/en-us/hotels/nycbo-citizenm-new-york-bowery/overview/",
-    "Latitude": 40.7180,
-    "Longitude": -73.9930,
+    "Latitude": 40.718,
+    "Longitude": -73.993,
     "Download (Mbps)": 65.1,
     "Upload (Mbps)": 48.1,
     "Latency (ms)": 18.2,
@@ -56,7 +56,7 @@
     "Route": "LAX-JFK",
     "Provider": "Viasat",
     "Download (Mbps)": 11.72,
-    "Upload (Mbps)": 18.10,
+    "Upload (Mbps)": 18.1,
     "Latency (ms)": null,
     "Jitter (ms)": null
   },
@@ -70,8 +70,8 @@
     "Provider": "Panasonic",
     "Download (Mbps)": 0.06,
     "Upload (Mbps)": 0.06,
-    "Latency (ms)": 5060.00,
-    "Jitter (ms)": 762.00
+    "Latency (ms)": 5060.0,
+    "Jitter (ms)": 762.0
   },
   {
     "Date Measured": "2025-10-14",
@@ -79,11 +79,11 @@
     "Category": "Restaurant",
     "Brand": "Starbucks",
     "Website": "https://maps.app.goo.gl/Kr497HgwErBGj6Hf9",
-    "Latitude": 32.8990,
-    "Longitude": -96.7690,
-    "Download (Mbps)": 68.50,
-    "Upload (Mbps)": 10.50,
-    "Latency (ms)": 22.00,
+    "Latitude": 32.899,
+    "Longitude": -96.769,
+    "Download (Mbps)": 68.5,
+    "Upload (Mbps)": 10.5,
+    "Latency (ms)": 22.0,
     "Jitter (ms)": 9.87
   },
   {
@@ -97,7 +97,7 @@
     "Download (Mbps)": 91.5,
     "Upload (Mbps)": 90.5,
     "Latency (ms)": 19.0,
-    "Jitter (ms)": 5.00
+    "Jitter (ms)": 5.0
   },
   {
     "Date Measured": "2025-12-31",
@@ -109,7 +109,7 @@
     "Longitude": -118.4081,
     "Download (Mbps)": 93.3,
     "Upload (Mbps)": 186,
-    "Latency (ms)": 9.20,
+    "Latency (ms)": 9.2,
     "Jitter (ms)": 2.08
   },
   {
@@ -117,8 +117,8 @@
     "Name": "Park Hyatt Toronto",
     "Category": "Hotel",
     "Website": "https://www.hyatt.com/park-hyatt/en-US/torph-park-hyatt-toronto",
-    "Latitude": 43.6700,
-    "Longitude": -79.3950,
+    "Latitude": 43.67,
+    "Longitude": -79.395,
     "Download (Mbps)": 1.65,
     "Upload (Mbps)": 9.16,
     "Latency (ms)": 365,
@@ -134,7 +134,7 @@
     "Download (Mbps)": 104,
     "Upload (Mbps)": 25.7,
     "Latency (ms)": 22.5,
-    "Jitter (ms)": 3.00
+    "Jitter (ms)": 3.0
   },
   {
     "Date Measured": "2026-01-02",
@@ -155,11 +155,24 @@
     "Category": "Restaurant",
     "Brand": "NEO COFFEE BAR",
     "Website": "https://www.neocoffeebar.com/location/yonge-gloucester/",
-    "Latitude": 43.6640,
-    "Longitude": -79.3840,
+    "Latitude": 43.664,
+    "Longitude": -79.384,
     "Download (Mbps)": 24.1,
     "Upload (Mbps)": 8.82,
     "Latency (ms)": 21.5,
     "Jitter (ms)": 17.9
+  },
+  {
+    "Date Measured": "2026-05-05",
+    "Name": "Delta LAX-MIA",
+    "Category": "Airline",
+    "Airline": "Delta",
+    "Aircraft Type": "A321neo",
+    "Route": "LAX-MIA",
+    "Provider": "Viasat",
+    "Download (Mbps)": 5.26,
+    "Upload (Mbps)": 1.71,
+    "Latency (ms)": 457.31,
+    "Jitter (ms)": null
   }
 ]
